@@ -1,0 +1,11 @@
+api:
+  route: API_ENDPOINT
+
+server:
+  port: PORT
+
+database:
+  host: DB_HOST
+  username: DB_USERNAME
+  password: DB_PASSWORD
+  db_name: DB_NAME

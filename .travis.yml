@@ -1,0 +1,24 @@
+language: node_js
+
+services:
+  - docker
+
+node_js:
+  - 12
+
+install:
+  - npm install -g surge
+  - npm install
+
+script:
+  - npm run build
+  - npm run docs:compodoc
+
+after_success:
+  - PACKAGE_VERSION=$(node -p "require('./package.json').version")
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t yashkumarverma/__project_name__:${PACKAGE_VERSION} -t yashkumarverma/__project_name__:latest .
+  - docker push yashkumarverma/__project_name__:${PACKAGE_VERSION}
+  - docker push yashkumarverma/__project_name__:latest
+  - surge --project ./documentation --domain __project_name__.compodoc.surge.sh
+  - curl ${DEPLOYMENT_PIPELINE}

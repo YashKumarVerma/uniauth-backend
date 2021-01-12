@@ -1,0 +1,22 @@
+api:
+  name: Foo
+  description: This is displayed on the API gateway
+  version: 1.0.0
+  route: 'api'
+
+database:
+  type: 'postgres'
+  port: 5432
+  host: 'localhost'
+  username: 'postgres'
+  password: 'postgres'
+  db_name: 'reverse_coding'
+  synchronize: true
+
+server:
+  port: 5000
+
+jwt:
+  secret: superSecretToken
+  issuer: hephaestus
+  expires: 1d
