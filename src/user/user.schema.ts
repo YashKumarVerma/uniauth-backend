@@ -20,7 +20,6 @@ export class User {
   @Prop()
   image: string;
 
-  @Exclude()
   @Prop({ required: true, select: false })
   password: string;
 

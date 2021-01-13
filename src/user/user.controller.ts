@@ -9,13 +9,16 @@ import {
   Logger,
   UsePipes,
   ValidationPipe,
-  ClassSerializerInterceptor,
-  UseInterceptors,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { AuthorizedUser } from './interface/user.interface';
+import { UserModule } from './user.module';
 
 /**
  * **User Controller**
@@ -29,6 +32,8 @@ import { ApiTags } from '@nestjs/swagger';
  * @category User
  */
 @ApiTags('user')
+@ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger('user');
@@ -41,8 +46,6 @@ export class UserController {
    */
   @Post()
   @UsePipes(ValidationPipe)
-  @UseInterceptors(ClassSerializerInterceptor)
-  //   @UseFilters(MongoExceptionFilter)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -58,13 +61,14 @@ export class UserController {
   }
 
   /**
-   * Responds to: _GET(`/:id`)_
+   * Responds to: _GET(`/`)_
    *
-   * Lists details of particular user
+   * Lists details of currenty authenticated user
    */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  findOne(@Request() request) {
+    const user: AuthorizedUser = request.user;
+    return this.userService.findOneById(user._id);
   }
 
   /**

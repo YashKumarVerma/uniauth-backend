@@ -1,5 +1,7 @@
 import * as config from 'config';
 
+import { ApplicationModule } from './application/application.module';
+import { AuthModule } from './auth/auth.module';
 /**
  * This is the entry-point of the project, and all modules are summoned here.
  * When adding new functionality, if it does not fall under any of the already
@@ -16,6 +18,11 @@ import { mongooseConfig } from './config/mongoose.config';
  * @category Module
  */
 @Module({
-  imports: [MongooseModule.forRoot(config.get('database.string'), mongooseConfig), UserModule],
+  imports: [
+    MongooseModule.forRoot(config.get('database.string'), mongooseConfig),
+    UserModule,
+    ApplicationModule,
+    AuthModule,
+  ],
 })
 export class AppModule {}

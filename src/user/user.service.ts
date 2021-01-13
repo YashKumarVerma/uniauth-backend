@@ -1,6 +1,6 @@
 import RegistrationNumberWorker from '@vitspot/vit-registration-number';
 
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,6 +9,8 @@ import { UserRepository } from './user.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from 'src/auth/dto/login.dto';
+import { UserModule } from './user.module';
 /**
  * **User Service**
  *
@@ -27,20 +29,37 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
+  /** funciton to facilitate user login */
+  async login(loginDto: LoginDto): Promise<any> {
+    const { email, password } = loginDto;
+    const user = await this.userModel
+      .findOne({ collegeEmail: email })
+      .select('password name registrationNumber collegeEmail');
+    if (user === null) {
+      throw new NotFoundException('user not found');
+    }
+
+    const hashCheck = await bcrypt.compareSync(password, user.password);
+    if (hashCheck === true) {
+      return user;
+    }
+
+    throw new UnauthorizedException('invalid credentials');
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const { registrationNumber } = createUserDto;
+      const { registrationNumber, name } = createUserDto;
       let { password, collegeEmail } = createUserDto;
 
       const regNumber = new RegistrationNumberWorker(registrationNumber);
       const branch = regNumber.getBranch();
       const batch = regNumber.getYear();
-      password = await bcrypt.hash(password, 10);
+      password = await bcrypt.hashSync(password, 10);
       collegeEmail = collegeEmail.toLowerCase();
 
-      const user = new this.userModel({ ...createUserDto, collegeEmail, branch, batch, password });
+      const user = new this.userModel({ name, collegeEmail, branch, batch, password, registrationNumber });
       await user.save();
-
       return user;
     } catch (e) {
       throw new ConflictException(e.message);
@@ -51,8 +70,8 @@ export class UserService {
     return this.userModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOneById(id: string) {
+    return this.userModel.findOne({ id });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
