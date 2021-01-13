@@ -1,7 +1,11 @@
+// import * as mongoose from 'mongoose';
+
+import * as mongoose from 'mongoose';
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+import { Application } from 'src/application/application.schema';
 import { Document } from 'mongoose';
-import { Exclude } from 'class-transformer';
 
 export type UserDocument = User & Document;
 
@@ -22,6 +26,9 @@ export class User {
 
   @Prop({ required: true, select: false })
   password: string;
+
+  @Prop({ default: false })
+  verified: boolean;
 
   /**
    * Registration Details
@@ -58,6 +65,10 @@ export class User {
    */
   @Prop([String])
   profile: string[];
+
+  /** Applications created by User */
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', required: true })
+  applications: Array<Application>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

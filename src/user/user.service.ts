@@ -10,7 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from 'src/auth/dto/login.dto';
-import { UserModule } from './user.module';
+
 /**
  * **User Service**
  *
@@ -70,8 +70,8 @@ export class UserService {
     return this.userModel.find();
   }
 
-  findOneById(id: string) {
-    return this.userModel.findOne({ id });
+  findOneById(userId: string) {
+    return this.userModel.findOne({ _id: userId });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

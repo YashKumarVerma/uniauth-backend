@@ -18,7 +18,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AuthorizedUser } from './interface/user.interface';
-import { UserModule } from './user.module';
 
 /**
  * **User Controller**
@@ -65,10 +64,10 @@ export class UserController {
    *
    * Lists details of currenty authenticated user
    */
-  @Get(':id')
+  @Get('details')
   findOne(@Request() request) {
     const user: AuthorizedUser = request.user;
-    return this.userService.findOneById(user._id);
+    return this.userService.findOneById(user.id);
   }
 
   /**

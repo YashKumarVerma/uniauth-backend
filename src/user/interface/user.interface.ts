@@ -1,6 +1,5 @@
 export interface AuthorizedUser {
-  _id: string;
-  name: string;
-  registrationNumber: string;
+  id?: string;
+  _id?: string;
   collegeEmail: string;
 }
