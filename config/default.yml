@@ -5,13 +5,8 @@ api:
   route: 'api'
 
 database:
-  type: 'postgres'
-  port: 5432
-  host: 'localhost'
-  username: 'postgres'
-  password: 'postgres'
-  db_name: 'reverse_coding'
-  synchronize: true
+  string: 'mongodb://127.0.0.1:27017/authentico'
+  type: 'mongodb'
 
 server:
   port: 5000

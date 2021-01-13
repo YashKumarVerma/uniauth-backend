@@ -5,7 +5,5 @@ server:
   port: PORT
 
 database:
-  host: DB_HOST
-  username: DB_USERNAME
-  password: DB_PASSWORD
-  db_name: DB_NAME
+  string: 'mongodb://127.0.0.1:27017/authentico'
+  type: 'mongodb'
