@@ -1,0 +1,42 @@
+import { JwtService } from '@nestjs/jwt';
+import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { newJWTConstants } from './constants/auth.constants';
+import { LoginDto } from './dto/login.dto';
+import { UserService } from 'src/user/user.service';
+
+@Injectable()
+export class AuthService {
+  /** initialize a logger with auth context */
+  private readonly logger = new Logger('auth');
+
+  constructor(
+    private jwtService: JwtService,
+
+    @Inject(UserService)
+    private readonly userService: UserService,
+  ) {}
+
+  /** check if given user is registered into database */
+  async validateUser(token: string): Promise<any> {
+    try {
+      const isValidToken = await this.jwtService.verifyAsync(token, newJWTConstants);
+      return isValidToken;
+    } catch (e) {
+      throw new UnauthorizedException(`invalid access`);
+    }
+  }
+
+  /**
+   * method to login into server with email and password
+   */
+  async checkLogin(loginDto: LoginDto) {
+    const user = await this.userService.login(loginDto);
+    if (!user) {
+      throw new UnauthorizedException(`Invalid Credentials`);
+    }
+
+    const jwtData = { id: user._id, reg: user.registrationNumber, email: user.collegeEmail, name: user.name };
+    const token = await this.jwtService.signAsync(jwtData, newJWTConstants);
+    return token;
+  }
+}
