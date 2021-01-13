@@ -1,6 +1,6 @@
 api:
-  name: Foo
-  description: This is displayed on the API gateway
+  name: Authentico
+  description: '**THE** auth system.'
   version: 1.0.0
   route: 'api'
 

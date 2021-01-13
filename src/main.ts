@@ -5,6 +5,7 @@ import * as rateLimit from 'express-rate-limit';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
+import { MongoExceptionFilter } from './auxiliary/exceptions/mongo.exceptions';
 import { NestFactory } from '@nestjs/core';
 
 /**
