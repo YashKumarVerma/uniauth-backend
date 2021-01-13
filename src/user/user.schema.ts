@@ -1,11 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 import { Document } from 'mongoose';
+import { Exclude } from 'class-transformer';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
+  constructor(partial: Partial<User>) {
+    Object.assign(this, partial);
+  }
+
   /**
    * Personal Details
    */
@@ -15,7 +20,8 @@ export class User {
   @Prop()
   image: string;
 
-  @Prop({ required: true })
+  @Exclude()
+  @Prop({ required: true, select: false })
   password: string;
 
   /**

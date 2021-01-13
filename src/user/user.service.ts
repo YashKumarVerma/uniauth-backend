@@ -30,14 +30,15 @@ export class UserService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const { registrationNumber } = createUserDto;
-      let { password } = createUserDto;
+      let { password, collegeEmail } = createUserDto;
 
       const regNumber = new RegistrationNumberWorker(registrationNumber);
       const branch = regNumber.getBranch();
       const batch = regNumber.getYear();
       password = await bcrypt.hash(password, 10);
+      collegeEmail = collegeEmail.toLowerCase();
 
-      const user = new this.userModel({ ...createUserDto, branch, batch, password });
+      const user = new this.userModel({ ...createUserDto, collegeEmail, branch, batch, password });
       await user.save();
 
       return user;
@@ -47,7 +48,7 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userModel.find();
   }
 
   findOne(id: number) {

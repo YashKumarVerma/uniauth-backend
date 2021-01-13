@@ -9,14 +9,13 @@ import {
   Logger,
   UsePipes,
   ValidationPipe,
-  Catch,
-  UseFilters,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { MongoExceptionFilter } from 'src/auxiliary/exceptions/mongo.exceptions';
 
 /**
  * **User Controller**
@@ -42,6 +41,7 @@ export class UserController {
    */
   @Post()
   @UsePipes(ValidationPipe)
+  @UseInterceptors(ClassSerializerInterceptor)
   //   @UseFilters(MongoExceptionFilter)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
