@@ -1,8 +1,8 @@
 import { BadGatewayException, BadRequestException, Catch, ConflictException, ExceptionFilter } from '@nestjs/common';
 
-import { MongoError } from 'mongodb';
+import { Error } from 'mongoose';
 
-@Catch(MongoError)
+@Catch(Error)
 export class MongoExceptionFilter implements ExceptionFilter {
   catch(error: any) {
     if (error.name === 'ValidationError') {

@@ -31,7 +31,6 @@ import { MongoExceptionFilter } from 'src/auxiliary/exceptions/mongo.exceptions'
  */
 @ApiTags('user')
 @Controller('user')
-@Catch(MongoExceptionFilter)
 export class UserController {
   private readonly logger = new Logger('user');
   constructor(private readonly userService: UserService) {}

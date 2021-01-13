@@ -1,6 +1,6 @@
 import RegistrationNumberWorker from '@vitspot/vit-registration-number';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -28,18 +28,22 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { registrationNumber } = createUserDto;
-    let { password } = createUserDto;
+    try {
+      const { registrationNumber } = createUserDto;
+      let { password } = createUserDto;
 
-    const regNumber = new RegistrationNumberWorker(registrationNumber);
-    const branch = regNumber.getBranch();
-    const batch = regNumber.getYear();
-    password = await bcrypt.hash(password, 10);
+      const regNumber = new RegistrationNumberWorker(registrationNumber);
+      const branch = regNumber.getBranch();
+      const batch = regNumber.getYear();
+      password = await bcrypt.hash(password, 10);
 
-    const user = new this.userModel({ ...createUserDto, branch, batch, password });
-    await user.save();
+      const user = new this.userModel({ ...createUserDto, branch, batch, password });
+      await user.save();
 
-    return user;
+      return user;
+    } catch (e) {
+      throw new ConflictException(e.message);
+    }
   }
 
   findAll() {
