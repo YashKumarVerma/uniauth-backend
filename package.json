@@ -1,7 +1,7 @@
 {
-  "name": "rc-heimdall",
-  "version": "1.2.1",
-  "description": "Heimdall is the gatekeeper service which does the heavy lifting of RC Infrastructure",
+  "name": "authentico-backend",
+  "version": "1.0.0",
+  "description": "Authentico is the core provider of auth services.",
   "author": "Yash Kumar Verma <yk.verma2000@gmail.com>",
   "private": true,
   "license": "MIT",
