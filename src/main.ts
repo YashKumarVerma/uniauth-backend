@@ -5,8 +5,9 @@ import * as rateLimit from 'express-rate-limit';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { MongoExceptionFilter } from './auxiliary/exceptions/mongo.exceptions';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
+import { join } from 'path';
 
 /**
  * Bootstrap application by attaching middleware and initializing auxillary services
@@ -14,9 +15,14 @@ import { NestFactory } from '@nestjs/core';
  */
 async function bootstrap() {
   /** set the logging levels */
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['log', 'error', 'warn', 'verbose'],
   });
+
+  /** configuring public and views directory */
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('hbs');
 
   /** configuring swaggerUI */
   const options = new DocumentBuilder()

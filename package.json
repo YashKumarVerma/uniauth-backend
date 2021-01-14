@@ -36,6 +36,7 @@
     "class-validator": "^0.12.2",
     "config": "^3.3.2",
     "express-rate-limit": "^5.2.3",
+    "hbs": "^4.1.1",
     "helmet": "^4.2.0",
     "mongoose": "^5.11.11",
     "mongoose-unique-validator": "^2.0.3",
