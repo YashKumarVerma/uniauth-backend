@@ -1,9 +1,8 @@
 import { CreateApplicationDto } from './dto/create-application.dto';
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
-import { UpdateApplicationDto } from './dto/update-application.dto';
+import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Application, ApplicationDocument } from './application.schema';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { v4 as generateUUID } from 'uuid';
 import { AuthorizedUser } from 'src/user/interface/user.interface';
 
@@ -39,8 +38,13 @@ export class ApplicationService {
     return this.applicationModel.find();
   }
 
-  findOneById(id: string) {
-    return this.applicationModel.findOne({ _id: id });
+  async findOneById(id: string) {
+    if (isValidObjectId(id)) {
+      const item = await this.applicationModel.findOne({ _id: id });
+      return item;
+    } else {
+      throw new BadRequestException();
+    }
   }
 
   //   update(id: number, updateApplicationDto: UpdateApplicationDto) {
