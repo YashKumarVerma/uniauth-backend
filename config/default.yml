@@ -15,3 +15,8 @@ jwt:
   secret: superSecretToken
   issuer: hephaestus
   expires: 1d
+
+access_token:
+  secret: somethingVerySecure
+  issuer: hephaestus
+  expires: 5m
