@@ -3,6 +3,7 @@ import { AccountService } from './account.service';
 import { ApplicationModule } from 'src/application/application.module';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
+import { UserModule } from 'src/user/user.module';
 import { accessTokenJwtConstants } from './constants/access_token.constants';
 
 @Module({
@@ -12,6 +13,7 @@ import { accessTokenJwtConstants } from './constants/access_token.constants';
       signOptions: { expiresIn: accessTokenJwtConstants.expiresIn },
     }),
     ApplicationModule,
+    UserModule,
   ],
   controllers: [AccountController],
   providers: [AccountService],

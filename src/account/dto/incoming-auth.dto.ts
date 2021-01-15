@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUrl, Length, Validate } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsUrl, Length, Validate } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { ApplicationScopes } from 'src/auxiliary/validators/applicationScope.validator';
@@ -20,4 +20,12 @@ export class IncomingAuthDto {
   @IsNotEmpty()
   @Validate(ApplicationScopes)
   scope: string;
+}
+
+export class IncomingAuthLoginDto extends IncomingAuthDto {
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  password: string;
 }

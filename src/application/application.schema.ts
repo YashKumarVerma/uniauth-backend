@@ -23,6 +23,9 @@ export class Application {
   @Prop({ required: true })
   supportEmail: string;
 
+  @Prop()
+  description: string;
+
   /** Application Configuration */
   @Prop({ required: true, type: [String] })
   authorizedOrigin: Array<string>;
