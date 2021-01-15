@@ -107,4 +107,37 @@ export class AccountController {
       return res.render('error', e.response);
     }
   }
+
+  /**
+   * Pages to register a new user into the system
+   */
+  @Get('/register')
+  async showRegisterPage(@Res() res: Response) {
+    try {
+      return res.render('account/register');
+    } catch (e) {
+      return res.render('error', e.response);
+    }
+  }
+
+  /**
+   * Page to receive verification callback from email
+   */
+  @Get('/register/verify')
+  async showRegisterSuccessPage(@Res() res: Response) {
+    try {
+      return res.render('account/register/verify');
+    } catch (e) {
+      return res.render('error', e.response);
+    }
+  }
+
+  @Post('/register')
+  async processRegisterPage(@Res() res: Response) {
+    try {
+      return res.render('account/register');
+    } catch (e) {
+      return res.render('error', e.response);
+    }
+  }
 }
