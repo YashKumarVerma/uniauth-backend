@@ -4,3 +4,6 @@
 
 ## Data Flow
 ![OAuth Flow](https://i.imgur.com/gPz32GC.png)
+
+## Consent Screen
+![Simple Consent Screen for event](https://i.imgur.com/Sv9DE6S.png) 
