@@ -34,9 +34,6 @@ export class Application {
   scope: Array<string>;
 
   /** applicaiton keys */
-  @Prop({ required: true, unique: true })
-  clientId: string;
-
   @Prop({ required: true })
   clientSecret: string;
 

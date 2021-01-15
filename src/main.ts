@@ -39,7 +39,7 @@ async function bootstrap() {
 
   /** attaching middleware */
   app.enableCors();
-  app.use(helmet());
+  //   app.use(helmet());
 
   /**
    * windowMs : time interval

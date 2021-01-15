@@ -31,5 +31,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   controllers: [ApplicationController],
   providers: [ApplicationService],
+  exports: [ApplicationService],
 })
 export class ApplicationModule {}

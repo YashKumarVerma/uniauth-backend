@@ -15,12 +15,10 @@ export class ApplicationService {
 
   async create(createApplicationDto: CreateApplicationDto, authorizedUser: AuthorizedUser): Promise<Application> {
     try {
-      const clientId = generateUUID();
       const clientSecret = generateUUID();
       const creationDate = new Date();
       const newApplication = new this.applicationModel({
         ...createApplicationDto,
-        clientId,
         clientSecret,
         creationDate,
         admin: authorizedUser.id,

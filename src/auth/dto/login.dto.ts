@@ -22,3 +22,8 @@ export class LoginDto {
   })
   password: string;
 }
+
+export class LoginDtoWithToken extends LoginDto {
+  @IsNotEmpty()
+  token: string;
+}

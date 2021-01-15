@@ -1,5 +1,7 @@
 import * as config from 'config';
 
+import { AccountController } from './account/account.controller';
+import { AccountModule } from './account/account.module';
 import { AppController } from './app.controller';
 import { ApplicationModule } from './application/application.module';
 import { AuthModule } from './auth/auth.module';
@@ -24,6 +26,7 @@ import { mongooseConfig } from './config/mongoose.config';
     UserModule,
     ApplicationModule,
     AuthModule,
+    AccountModule,
   ],
   controllers: [AppController],
 })
