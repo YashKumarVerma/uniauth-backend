@@ -12,7 +12,7 @@ function updateSignUpLink() {
     window.sessionStorage.setItem('oauth', queryString);
 
     /** change signup link */
-    $('#singUpLink').attr('href', `./signup${queryString}`);
+    // $('#singUpLink').attr('href', `./signup${queryString}`);
 
     /** extract auth data and save into session storage */
     const urlParams = new URLSearchParams(queryString);
