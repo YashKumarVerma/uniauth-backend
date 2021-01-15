@@ -1,4 +1,16 @@
-import { Body, Controller, Get, Inject, Logger, Post, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Logger,
+  NotFoundException,
+  Post,
+  Query,
+  Res,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { IncomingAuthDto, IncomingAuthLoginDto } from './dto/incoming-auth.dto';
 import { AccountService } from './account.service';
@@ -71,6 +83,27 @@ export class AccountController {
        * Render error page with validation error mesage
        */
       this.logger.error(`POST ${e.message} for ${client_id}`);
+      return res.render('error', e.response);
+    }
+  }
+
+  /**
+   * To show reset password page
+   */
+  @Get('/password/request')
+  async showPasswordRequestPage(@Res() res: Response) {
+    try {
+      return res.render('password/request');
+    } catch (e) {
+      return res.render('error', e.response);
+    }
+  }
+
+  @Get('/password/reset')
+  async showPasswordResetPage(@Res() res: Response) {
+    try {
+      return res.render('password/reset');
+    } catch (e) {
       return res.render('error', e.response);
     }
   }
