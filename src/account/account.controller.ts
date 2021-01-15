@@ -15,7 +15,9 @@ export class AccountController {
     private readonly userService: UserService,
   ) {}
 
-  /** to handle requests from client applications */
+  /**
+   * to display login form on client-initiated-auth
+   */
   @Get('/login')
   @UsePipes(
     new ValidationPipe({
@@ -26,7 +28,6 @@ export class AccountController {
     const { client_id } = incomingAuthDto;
     try {
       const applicationDetails = await this.accountService.validateAccessRequest(incomingAuthDto);
-      applicationDetails.scope = applicationDetails.scope.map((givenScope) => scopeMapper(givenScope));
       return res.render('account/login', { app: applicationDetails });
     } catch (e) {
       this.logger.error(`${e.message} for ${client_id}`);
@@ -34,6 +35,9 @@ export class AccountController {
     }
   }
 
+  /**
+   * To handle login form submission on client-initiated-auth
+   */
   @Post('/login')
   @UsePipes(
     new ValidationPipe({
@@ -41,31 +45,31 @@ export class AccountController {
     }),
   )
   async processLoginPage(@Res() res: Response, @Body() incomingAuthDto: IncomingAuthLoginDto) {
-    /** external catch block to handle valdation, server errors */
     const { client_id } = incomingAuthDto;
+
+    /**
+     * validate and get application details from incoming dto
+     */
     try {
-      /** get application details from incoming dto */
       const applicationDetails = await this.accountService.validateAccessRequest(incomingAuthDto);
-      applicationDetails.scope = applicationDetails.scope.map((givenScope) => scopeMapper(givenScope));
 
-      /** handle user authentication */
+      /**
+       * ensure authentication for users
+       */
       try {
-        /** check username and password */
-        const { email, password } = incomingAuthDto;
-        const loggedInUser = await this.userService.login({ email, password });
-        this.logger.verbose(`Access granted by ${loggedInUser?.name}`);
-
-        /** generate access token */
-        const access_token = await this.accountService.generateAccessToken(incomingAuthDto);
-
-        /** redirect user to redirect window */
+        const access_token = await this.accountService.authenticateAndGenerateToken(incomingAuthDto);
         res.redirect(`${incomingAuthDto.redirect_uri}/?access_token=${access_token}`);
       } catch (e) {
-        /** if user details match failed, then show error to user */
+        /**
+         * Render login page with error message from server
+         */
         this.logger.error(`${e.message} for ${client_id}`);
         return res.render('account/login', { app: applicationDetails, server: { message: e.message } });
       }
     } catch (e) {
+      /**
+       * Render error page with validation error mesage
+       */
       this.logger.error(`POST ${e.message} for ${client_id}`);
       return res.render('error', e.response);
     }

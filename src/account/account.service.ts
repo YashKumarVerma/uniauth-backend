@@ -2,12 +2,16 @@ import { BadRequestException, Inject, Logger } from '@nestjs/common';
 import { ApplicationService } from 'src/application/application.service';
 import { JwtService } from '@nestjs/jwt';
 import { accessTokenJwtConstants } from './constants/access_token.constants';
-import { IncomingAuthDto } from './dto/incoming-auth.dto';
+import { IncomingAuthDto, IncomingAuthLoginDto } from './dto/incoming-auth.dto';
 import { Injectable } from '@nestjs/common';
 import { Application } from 'src/application/application.schema';
+import { scopeMapper } from './minions/scopeMapper.minion';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AccountService {
+  private readonly logger = new Logger('accounts');
+
   /**
    * Initialize account services
    */
@@ -16,6 +20,9 @@ export class AccountService {
 
     @Inject(ApplicationService)
     private readonly applicationService: ApplicationService,
+
+    @Inject(UserService)
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -34,6 +41,8 @@ export class AccountService {
     if (!details.authorizedRedirect.includes(redirect_uri)) {
       throw new BadRequestException('invalid redirected uri');
     }
+
+    details.scope = details.scope.map((givenScope) => scopeMapper(givenScope));
 
     return details;
   }
@@ -55,9 +64,25 @@ export class AccountService {
       throw new BadRequestException('invalid redirected uri');
     }
 
+    details.scope = details.scope.map((givenScope) => scopeMapper(givenScope));
+
     /** now generate a new access token  */
     const tokenPayload = { token: String(details._id) };
     const token = await this.jwtService.signAsync(tokenPayload, accessTokenJwtConstants);
     return token;
+  }
+
+  /**
+   * Service to a user into servers
+   */
+  async authenticateAndGenerateToken(incomingAuthDto: IncomingAuthLoginDto): Promise<string> {
+    /** check username and password */
+    const { email, password } = incomingAuthDto;
+    const loggedInUser = await this.userService.login({ email, password });
+    this.logger.verbose(`Access granted by ${loggedInUser?.name}`);
+
+    /** generate access token */
+    const accessToken = await this.generateAccessToken(incomingAuthDto);
+    return accessToken;
   }
 }
