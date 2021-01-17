@@ -34,7 +34,7 @@ export class UserService {
     const { email, password } = loginDto;
     const user = await this.userModel
       .findOne({ collegeEmail: email })
-      .select('password name registrationNumber collegeEmail');
+      .select('_id password name registrationNumber collegeEmail');
     if (user === null) {
       throw new NotFoundException('user not found');
     }

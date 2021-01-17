@@ -1,8 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
-import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Body, Inject, Injectable, Logger, UnauthorizedException, UsePipes, ValidationPipe } from '@nestjs/common';
 import { newJWTConstants } from './constants/auth.constants';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
+import { ObjectId } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -29,13 +30,18 @@ export class AuthService {
   /**
    * method to login into server with email and password
    */
-  async checkLogin(loginDto: LoginDto) {
+  async checkLogin(@Body() loginDto: LoginDto) {
     const user = await this.userService.login(loginDto);
     if (!user) {
       throw new UnauthorizedException(`Invalid Credentials`);
     }
 
     const jwtData = { id: user._id, email: user.collegeEmail };
+    const token = await this.jwtService.signAsync(jwtData, newJWTConstants);
+    return token;
+  }
+
+  async generateJwt(jwtData: { id: ObjectId; email: string }): Promise<string> {
     const token = await this.jwtService.signAsync(jwtData, newJWTConstants);
     return token;
   }

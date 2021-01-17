@@ -1,4 +1,5 @@
 import * as config from 'config';
+import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 
@@ -53,6 +54,9 @@ async function bootstrap() {
       max: 10,
     }),
   );
+
+  /** attach cookie parser */
+  app.use(cookieParser());
 
   /** binding port to service */
   await app.listen(config.get('server.port'));

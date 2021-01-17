@@ -1,6 +1,7 @@
 import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
 import { ApplicationModule } from 'src/application/application.module';
+import { AuthModule } from 'src/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { UserModule } from 'src/user/user.module';
@@ -14,6 +15,7 @@ import { accessTokenJwtConstants } from './constants/access_token.constants';
     }),
     ApplicationModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AccountController],
   providers: [AccountService],
