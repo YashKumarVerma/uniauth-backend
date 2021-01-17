@@ -10,7 +10,7 @@ export class AppController {
   showIndexPage(@Res() res: Response) {
     const templateData = {
       header: 'the next gen auth in vit',
-      title: 'Authentico',
+      title: 'UniAuth',
       body: 'the only registration form you will ever fill',
       button: {
         title: 'Get Involved',

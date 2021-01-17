@@ -10,6 +10,10 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   /**
+   * OAUTH FLOW HANDLERS :: Displayed only when invoded mid-way auth flow
+   */
+
+  /**
    * to display login form on client-initiated-auth
    */
   @Get('o/login')
@@ -18,11 +22,11 @@ export class AccountController {
       disableErrorMessages: false,
     }),
   )
-  async showLoginPage(@Res() res: Response, @Query() incomingAuthDto: IncomingAuthDto) {
+  async showLoginPageAsAuth(@Res() res: Response, @Query() incomingAuthDto: IncomingAuthDto) {
     const { client_id } = incomingAuthDto;
     try {
       const applicationDetails = await this.accountService.validateAccessRequest(incomingAuthDto);
-      return res.render('account/login', { app: applicationDetails });
+      return res.render('account/o/login', { app: applicationDetails });
     } catch (e) {
       this.logger.error(`${e.message} for ${client_id}`);
       return res.render('error', e.response);
@@ -38,7 +42,7 @@ export class AccountController {
       disableErrorMessages: false,
     }),
   )
-  async processLoginPage(@Res() res: Response, @Body() incomingAuthDto: IncomingAuthLoginDto) {
+  async processLoginPageAsAuth(@Res() res: Response, @Body() incomingAuthDto: IncomingAuthLoginDto) {
     const { client_id } = incomingAuthDto;
 
     /**
@@ -58,13 +62,33 @@ export class AccountController {
          * Render login page with error message from server
          */
         this.logger.error(`${e.message} for ${client_id}`);
-        return res.render('account/login', { app: applicationDetails, server: { message: e.message } });
+        return res.render('account/o/login', { app: applicationDetails, server: { message: e.message } });
       }
     } catch (e) {
       /**
        * Render error page with validation error mesage
        */
       this.logger.error(`POST ${e.message} for ${client_id}`);
+      return res.render('error', e.response);
+    }
+  }
+
+  /**
+   * NON OAUTH FLOW HANDLERS :: Normal Operations
+   */
+  /**
+   * to display login page
+   */
+  @Get('login')
+  @UsePipes(
+    new ValidationPipe({
+      disableErrorMessages: false,
+    }),
+  )
+  async showLoginPage(@Res() res: Response) {
+    try {
+      return res.render('account/login');
+    } catch (e) {
       return res.render('error', e.response);
     }
   }
