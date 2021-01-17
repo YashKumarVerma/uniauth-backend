@@ -1,36 +1,18 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  Logger,
-  NotFoundException,
-  Post,
-  Query,
-  Res,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Response } from 'express';
 import { IncomingAuthDto, IncomingAuthLoginDto } from './dto/incoming-auth.dto';
 import { AccountService } from './account.service';
-import { scopeMapper } from './minions/scopeMapper.minion';
-import { UserService } from 'src/user/user.service';
 
 @Controller('account')
 export class AccountController {
   private readonly logger = new Logger('account');
 
-  constructor(
-    private readonly accountService: AccountService,
-    @Inject(UserService)
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly accountService: AccountService) {}
 
   /**
    * to display login form on client-initiated-auth
    */
-  @Get('/login')
+  @Get('o/login')
   @UsePipes(
     new ValidationPipe({
       disableErrorMessages: false,
@@ -50,10 +32,10 @@ export class AccountController {
   /**
    * To handle login form submission on client-initiated-auth
    */
-  @Post('/login')
+  @Post('o/login')
   @UsePipes(
     new ValidationPipe({
-      disableErrorMessages: true,
+      disableErrorMessages: false,
     }),
   )
   async processLoginPage(@Res() res: Response, @Body() incomingAuthDto: IncomingAuthLoginDto) {
