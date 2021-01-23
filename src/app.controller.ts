@@ -14,7 +14,7 @@ export class AppController {
       body: 'the only registration form you will ever fill',
       button: {
         title: 'Get Involved',
-        href: './login',
+        href: 'account/login',
       },
     };
     return res.render('landing', templateData);
