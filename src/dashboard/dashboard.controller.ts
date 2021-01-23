@@ -1,34 +1,64 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Logger, Res, UseGuards, Request, Inject } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
-import { CreateDashboardDto } from './dto/create-dashboard.dto';
-import { UpdateDashboardDto } from './dto/update-dashboard.dto';
+import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { UserService } from 'src/user/user.service';
+import { AuthorizedUser } from 'src/user/interface/user.interface';
+import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
 
 @Controller('dashboard')
 export class DashboardController {
-  constructor(private readonly dashboardService: DashboardService) {}
+  private readonly logger = new Logger('dashboard');
 
-  @Post()
-  create(@Body() createDashboardDto: CreateDashboardDto) {
-    return this.dashboardService.create(createDashboardDto);
+  /** initialize dashboard module */
+  constructor(
+    private readonly dashboardService: DashboardService,
+    @Inject(UserService) private readonly userService: UserService,
+  ) {
+    this.logger.verbose('dashboard initialized');
   }
 
+  /**
+   * Render Landing Page
+   */
   @Get()
-  findAll() {
-    return this.dashboardService.findAll();
+  @UseGuards(JwtAuthGuard)
+  async showDashboard(@Request() req, @Res() res: Response) {
+    const loggedInUser: LoggedInUser = req.user;
+    const user = await this.userService.findOneById(loggedInUser.id);
+    return res.render('dashboard/dashboard.hbs', { user });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dashboardService.findOne(+id);
+  /**
+   * To load user dashboard
+   */
+  @Get('/profile')
+  @UseGuards(JwtAuthGuard)
+  async showProfile(@Request() req, @Res() res: Response) {
+    const loggedInUser: LoggedInUser = req.user;
+    const user = await this.userService.findOneById(loggedInUser.id);
+    return res.render('dashboard/profile.hbs', { user });
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateDashboardDto: UpdateDashboardDto) {
-    return this.dashboardService.update(+id, updateDashboardDto);
+  /**
+   * To load data tab
+   */
+  @Get('/data')
+  @UseGuards(JwtAuthGuard)
+  async showData(@Request() req, @Res() res: Response) {
+    const loggedInUser: LoggedInUser = req.user;
+    const user = await this.userService.findOneById(loggedInUser.id);
+    return res.render('dashboard/data.hbs', { user });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dashboardService.remove(+id);
+  /**
+   * To load dev tab
+   */
+  @Get('/dev')
+  @UseGuards(JwtAuthGuard)
+  async showDev(@Request() req, @Res() res: Response) {
+    const loggedInUser: LoggedInUser = req.user;
+    const user = await this.userService.findOneById(loggedInUser.id);
+    return res.render('dashboard/dev.hbs', { user });
   }
 }
