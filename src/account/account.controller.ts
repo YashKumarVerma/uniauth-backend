@@ -101,6 +101,19 @@ export class AccountController {
     }
   }
 
+  /**
+   * to logout user from module
+   */
+  @Get('logout')
+  async logoutUser(@Res() res: Response) {
+    try {
+      res.cookie('vitAuth', '');
+      res.redirect('./../');
+    } catch (e) {
+      return res.render('error', e.response);
+    }
+  }
+
   @Post('login')
   @UsePipes(ValidationPipe)
   async processLoginPage(@Res() res: Response, @Body() loginDto: LoginDto) {
