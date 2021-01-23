@@ -37,3 +37,8 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class CreateUserDtoWithCaptcha extends CreateUserDto {
+  @IsNotEmpty()
+  token: string;
+}

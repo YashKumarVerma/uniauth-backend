@@ -5,6 +5,7 @@ import { AccountService } from './account.service';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from 'src/auth/auth.service';
+import { CreateUserDtoWithCaptcha } from 'src/user/dto/create-user.dto';
 
 @Controller('account')
 export class AccountController {
@@ -160,11 +161,25 @@ export class AccountController {
   }
 
   @Post('/register')
-  async processRegisterPage(@Res() res: Response) {
+  @UsePipes(
+    new ValidationPipe({
+      disableErrorMessages: false,
+    }),
+  )
+  async processRegisterPage(@Res() res: Response, @Body() createUserDtoWithCaptcha: CreateUserDtoWithCaptcha) {
     try {
-      return res.render('account/register');
+      const response = await this.userService.create(createUserDtoWithCaptcha);
+      const templateData = {
+        server: {
+          message: 'please check your email for verification link',
+        },
+      };
+      return res.render('account/register', templateData);
     } catch (e) {
-      return res.render('error', e.response);
+      const templateData = {
+        server: e.response,
+      };
+      return res.render('account/register', templateData);
     }
   }
 }
