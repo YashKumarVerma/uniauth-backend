@@ -109,7 +109,8 @@ export class AccountController {
       const jwtData = { id: user._id, email: user.collegeEmail };
       const cookieData = await this.authService.generateJwt(jwtData);
       res.cookie('vitAuth', cookieData);
-      res.render('profile/homepage', user);
+      //   res.render('profile/homepage', user);
+      res.redirect('./../dashboard');
     } catch (e) {
       return res.render('account/login', { server: { message: e.message } });
     }

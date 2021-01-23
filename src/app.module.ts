@@ -15,6 +15,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { mongooseConfig } from './config/mongoose.config';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 /**
  * Main Application Module
@@ -27,6 +28,7 @@ import { mongooseConfig } from './config/mongoose.config';
     ApplicationModule,
     AuthModule,
     AccountModule,
+    DashboardModule,
   ],
   controllers: [AppController],
 })
