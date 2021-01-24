@@ -30,7 +30,8 @@
     <section class="text-gray-700 body-font mt-10">
         <div class="flex justify-between">
             <h1 class="text-2xl pl-10 font-semibold tracking-tighter">My Applications</h1>
-            <button class="mr-16 font-bold p-3 bordered hover:text-blue-700 ">+ New Application</button>
+            <button id="newApplicationButton" class="mr-16 font-bold p-3 bordered hover:text-blue-700 ">+ New
+                Application</button>
         </div>
         <div class="container px-8 pt-10 mx-auto lg:px-4">
             <div class="flex flex-wrap text-center">
@@ -85,7 +86,7 @@
             </div>
         </div>
     </section>
-    <section class="text-gray-700 body-font mt-20 mb-12">
+    <section class="text-gray-700 body-font mt-20 mb-12" id="newApplicationSection" style="display: none;">
         <form action="" id="newApplicationForm">
             <div class="flex">
                 <h1 class="text-2xl pl-10 font-semibold tracking-tighter">New Application</h1>
@@ -151,6 +152,8 @@
         const supportEmail = document.getElementById("email").value
 
         if (applicationName !== "" && supportEmail !== "" && window.accessToken === undefined) {
+            alert("Invalid Input");
+            return
             // show popup or whatever
         }
 
@@ -169,11 +172,11 @@
         })
             .then(parseFetchResponse)
             .then(({ json, meta }) => {
-                if (json.statusCode === 400) {
-                    alert(`Error creating application, total ${json.message.length} errors.\n\n${json.message.map((m) => m)}`)
-                }
-                else if (json.statusCode === 201) {
+                if (json.statusCode === 201) {
                     window.location.reload()
+                }
+                else {
+                    alert(`Error creating application, total ${json.message.length} errors.\n\n${json.message.map((m) => m)}`)
                 }
             })
     }
@@ -186,6 +189,11 @@
         } catch (e) {
             alert("Erorr Creating Application")
         }
+    })
+
+    /** to show new application block only on clicking the button **/
+    document.getElementById("newApplicationButton").addEventListener("click", () => {
+        document.getElementById("newApplicationSection").style.display = "block"
     })
 
 </script>
