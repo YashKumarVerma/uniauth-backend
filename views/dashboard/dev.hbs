@@ -37,12 +37,12 @@
             <div class="flex flex-wrap text-center">
                 {{!-- application cards loop start --}}
                 {{!-- first application card start --}}
+                {{#each app.items}}
                 <div class="px-2 py-6 mx-auto lg:w-1/3 md:w-full">
                     <div class="p-4 border rounded-xl">
-                        <h2 class="mb-3 text-lg font-bold text-blue-700 lg:text-4xl title-font"> App 1
+                        <h2 class="mb-3 text-lg font-bold text-blue-700 lg:text-4xl title-font"> {{name}}
                         </h2>
-                        <p class="mb-4 text-base leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. In possimus velit dolor
+                        <p class="mb-4 text-base leading-relaxed">{{description}}
                         </p>
                         <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
                             <h3 class="tracking-widest">registrations</h3>
@@ -58,30 +58,8 @@
                         </button>
                     </div>
                 </div>
+                {{/each}}
                 {{!-- first application card end --}}
-                {{!-- second application card start --}}
-                <div class="px-2 py-6 mx-auto lg:w-1/3 md:w-full">
-                    <div class="p-4 border rounded-xl">
-                        <h2 class="mb-3 text-lg font-bold text-blue-700 lg:text-4xl title-font"> App 1
-                        </h2>
-                        <p class="mb-4 text-base leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. In possimus velit dolor
-                        </p>
-                        <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
-                            <h3 class="tracking-widest">registrations</h3>
-                            <h2
-                                class="flex items-center justify-center mt-2 mb-4 text-3xl font-bold leading-none text-blue-800 lg:text-6xl">
-                                50
-                                <span class="ml-1 text-base text-gray-600">/mo</span>
-                            </h2>
-                        </div>
-                        <button
-                            class="flex items-center px-4 py-2 mx-auto mt-auto font-semibold text-black duration-500 ease-in-out transform bg-white border rounded-lg shadow-xl transittion hover:text-white hover:bg-black hover:border-black focus:shadow-outline focus:outline-none">
-                            View Details
-                        </button>
-                    </div>
-                </div>
-                {{!-- second application card end --}}
                 {{!-- application card loop ends --}}
             </div>
         </div>
@@ -107,6 +85,12 @@
                         {{!-- Support Email --}}
                         <div class="relative ">
                             <input type="email" id="email" name="email" placeholder="Support Email Address"
+                                class="w-full px-4 py-2 mb-1 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                        </div>
+
+                        {{!-- Description --}}
+                        <div class="relative ">
+                            <input type="text" id="description" name="description" placeholder="Description about event"
                                 class="w-full px-4 py-2 mb-1 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
 
@@ -150,11 +134,11 @@
 
         const applicationName = document.getElementById("name").value
         const supportEmail = document.getElementById("email").value
+        const description = document.getElementById("description").value
 
-        if (applicationName !== "" && supportEmail !== "" && window.accessToken === undefined) {
+        if (applicationName !== "" && supportEmail !== "" && description !== "" && window.accessToken === undefined) {
             alert("Invalid Input");
-            return
-            // show popup or whatever
+            return false
         }
 
 
@@ -167,7 +151,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: applicationName, supportEmail, scope, authorizedOrigin: [], authorizedRedirect: []
+                name: applicationName, supportEmail, scope, authorizedOrigin: [], authorizedRedirect: [], description
             })
         })
             .then(parseFetchResponse)

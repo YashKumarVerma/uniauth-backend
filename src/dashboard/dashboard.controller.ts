@@ -6,6 +6,8 @@ import { UserService } from 'src/user/user.service';
 import { AuthorizedUser } from 'src/user/interface/user.interface';
 import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
 import { SCOPE } from 'src/account/minions/scopeMapper.minion';
+import { ApplicationModule } from 'src/application/application.module';
+import { ApplicationService } from 'src/application/application.service';
 
 @Controller('dashboard')
 export class DashboardController {
@@ -15,6 +17,7 @@ export class DashboardController {
   constructor(
     private readonly dashboardService: DashboardService,
     @Inject(UserService) private readonly userService: UserService,
+    @Inject(ApplicationService) private readonly applicationService: ApplicationService,
   ) {
     this.logger.verbose('dashboard initialized');
   }
@@ -60,11 +63,13 @@ export class DashboardController {
   async showDev(@Request() req, @Res() res: Response) {
     const loggedInUser: LoggedInUser = req.user;
     const user = await this.userService.findOneById(loggedInUser.id);
+    const applications = await this.applicationService.findAllByOwner(user);
 
     return res.render('dashboard/dev.hbs', {
       user,
       app: {
         scope: SCOPE,
+        items: applications,
       },
     });
   }

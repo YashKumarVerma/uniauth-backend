@@ -18,6 +18,11 @@ export class CreateApplicationDto {
   @MaxLength(255)
   name: string;
 
+  @IsNotEmpty()
+  @MinLength(15)
+  @MaxLength(100)
+  description: string;
+
   @ApiProperty({ description: 'email displayed at consent page', example: 'yk.verma2000@gmail.com' })
   @IsEmail()
   supportEmail: string;

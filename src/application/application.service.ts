@@ -2,9 +2,10 @@ import { CreateApplicationDto } from './dto/create-application.dto';
 import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Application, ApplicationDocument } from './application.schema';
-import { isValidObjectId, Model } from 'mongoose';
+import { isValidObjectId, Model, ObjectId } from 'mongoose';
 import { v4 as generateUUID } from 'uuid';
 import { AuthorizedUser } from 'src/user/interface/user.interface';
+import { User } from 'src/user/user.schema';
 
 @Injectable()
 export class ApplicationService {
@@ -45,9 +46,11 @@ export class ApplicationService {
     }
   }
 
-  //   update(id: number, updateApplicationDto: UpdateApplicationDto) {
-  //     return `This action updates a #${id} application`;
-  //   }
+  /** to return details of applications created by user */
+  async findAllByOwner(user: User): Promise<Array<Application>> {
+    const item = await this.applicationModel.find({ admin: user });
+    return item;
+  }
 
   remove(id: string) {
     return this.applicationModel.deleteOne({ _id: id });

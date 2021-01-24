@@ -7,6 +7,10 @@ import { User } from 'src/user/user.schema';
 
 export type ApplicationDocument = Application & Document;
 
+/**
+ * @Todo
+ * - add support for participant array
+ */
 @Schema()
 export class Application {
   constructor(partial: Partial<Application>) {
