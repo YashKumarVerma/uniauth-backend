@@ -26,7 +26,6 @@ export class CreateApplicationDto {
     description: 'list of origins that are allowed to invoke the client',
     example: ['localhost:5000', 'http://localhost:5000', 'https://localhost:5000/login'],
   })
-  @IsNotEmpty()
   @IsArray()
   authorizedOrigin: Array<string>;
 
@@ -34,7 +33,6 @@ export class CreateApplicationDto {
     description: 'list of locations that the application is allowed to navigate after success',
     example: ['localhost:5000/callback', 'http://localhost:5000/callback', 'https://localhost:5000/login/callback'],
   })
-  @IsNotEmpty()
   @IsArray()
   authorizedRedirect: Array<string>;
 

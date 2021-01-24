@@ -5,6 +5,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserService } from 'src/user/user.service';
 import { AuthorizedUser } from 'src/user/interface/user.interface';
 import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
+import { SCOPE } from 'src/account/minions/scopeMapper.minion';
 
 @Controller('dashboard')
 export class DashboardController {
@@ -59,6 +60,12 @@ export class DashboardController {
   async showDev(@Request() req, @Res() res: Response) {
     const loggedInUser: LoggedInUser = req.user;
     const user = await this.userService.findOneById(loggedInUser.id);
-    return res.render('dashboard/dev.hbs', { user });
+
+    return res.render('dashboard/dev.hbs', {
+      user,
+      app: {
+        scope: SCOPE,
+      },
+    });
   }
 }

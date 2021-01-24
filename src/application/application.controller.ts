@@ -26,6 +26,7 @@ export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   create(@Request() req, @Body() createApplicationDto: CreateApplicationDto) {
     const user: AuthorizedUser = req.user;

@@ -27,8 +27,6 @@
         </div>
     </header>
     {{!-- dashboard header ends --}}
-
-
     <section class="text-gray-700 body-font mt-10">
         <div class="flex justify-between">
             <h1 class="text-2xl pl-10 font-semibold tracking-tighter">My Applications</h1>
@@ -37,14 +35,14 @@
         <div class="container px-8 pt-10 mx-auto lg:px-4">
             <div class="flex flex-wrap text-center">
                 {{!-- application cards loop start --}}
-
                 {{!-- first application card start --}}
                 <div class="px-2 py-6 mx-auto lg:w-1/3 md:w-full">
                     <div class="p-4 border rounded-xl">
                         <h2 class="mb-3 text-lg font-bold text-blue-700 lg:text-4xl title-font"> App 1
                         </h2>
                         <p class="mb-4 text-base leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. In possimus velit dolor </p>
+                            elit. In possimus velit dolor
+                        </p>
                         <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
                             <h3 class="tracking-widest">registrations</h3>
                             <h2
@@ -60,14 +58,14 @@
                     </div>
                 </div>
                 {{!-- first application card end --}}
-
                 {{!-- second application card start --}}
                 <div class="px-2 py-6 mx-auto lg:w-1/3 md:w-full">
                     <div class="p-4 border rounded-xl">
                         <h2 class="mb-3 text-lg font-bold text-blue-700 lg:text-4xl title-font"> App 1
                         </h2>
                         <p class="mb-4 text-base leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. In possimus velit dolor </p>
+                            elit. In possimus velit dolor
+                        </p>
                         <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
                             <h3 class="tracking-widest">registrations</h3>
                             <h2
@@ -83,48 +81,113 @@
                     </div>
                 </div>
                 {{!-- second application card end --}}
-
                 {{!-- application card loop ends --}}
             </div>
         </div>
     </section>
-
-
-
-    <section class="text-gray-700 body-font mt-20">
-        <div class="flex">
-            <h1 class="text-2xl pl-10 font-semibold tracking-tighter">New Application</h1>
-        </div>
-        <div class="container px-8 pt-10 mx-auto lg:px-4">
-            <div class="flex flex-wrap text-center">
-                {{!-- application cards loop start --}}
-                <div
-                    class="flex flex-col w-full p-8 mx-auto mt-10 border rounded-lg lg:w-1/2 md:w-1/2 md:ml-auto md:mt-0">
-                    <div class="relative ">
-                        <input type="email" id="email" name="email" placeholder="Password"
-                            class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
-                    </div>
-                    <div class="relative ">
-                        <input type="email" id="email" name="email" placeholder="email"
-                            class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
-                    </div>
-                    <button
-                        class="px-8 py-2 font-semibold text-white transition duration-500 ease-in-out transform rounded-lg shadow-xl bg-gradient-to-r from-blue-700 hover:from-blue-600 to-blue-600 hover:to-blue-700 focus:ring focus:outline-none">Button</button>
-                    <p class="mx-auto mt-3 text-xs "><a href="#"
-                            class="inline-flex items-center font-semibold text-blue-700 md:mb-2 lg:mb-0 hover:text-blue-400 ">
-                            Sign in with Twitter
-                            <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20"
-                                height="20" fill="currentColor">
-                                <path fill="none" d="M0 0h24v24H0z" />
-                                <path
-                                    d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" />
-                            </svg>
-                        </a></p>
-                </div>
-                {{!-- application card loop ends --}}
+    <section class="text-gray-700 body-font mt-20 mb-12">
+        <form action="" id="newApplicationForm">
+            <div class="flex">
+                <h1 class="text-2xl pl-10 font-semibold tracking-tighter">New Application</h1>
             </div>
-        </div>
+            <div class="container px-8 pt-10 mx-auto lg:px-4">
+                <div class="flex flex-wrap text-center">
+
+                    {{!-- application cards loop start --}}
+                    <div
+                        class="flex flex-col w-full p-8 mx-auto mt-10 border rounded-lg lg:w-1/2 md:w-1/2 md:ml-auto md:mt-0">
+
+                        {{!-- Application Name --}}
+                        <div class="relative ">
+                            <input type="text" id="name" name="name" placeholder="Application Name"
+                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                        </div>
+
+                        {{!-- Support Email --}}
+                        <div class="relative ">
+                            <input type="email" id="email" name="email" placeholder="Support Email Address"
+                                class="w-full px-4 py-2 mb-1 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                        </div>
+
+                        {{!-- Scopes --}}
+                        <div class="flex flex-col items-center justify-center mt-10 mb-10">
+                            <small>The data your application would have access to. This is <b>clearly visible</b>
+                                at time of login
+                            </small>
+                            <div class="relative ">
+                                <div class="flex flex-col">
+                                    {{#each app.scope}}
+                                    <label class="inline-flex items-center mt-3">
+                                        <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600"
+                                            value={{id}}><span class="ml-2 text-gray-700">{{display}}</span>
+                                    </label>
+                                    {{/each}}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button id="createApplicationButton" type="submit"
+                            class="px-8 py-2 font-semibold text-white transition duration-500 ease-in-out transform rounded-lg shadow-xl bg-gradient-to-r from-blue-700 hover:from-blue-600 to-blue-600 hover:to-blue-700 focus:ring focus:outline-none">Create
+                            Application</button>
+                    </div>
+                    {{!-- application card loop ends --}}
+                </div>
+            </div>
+        </form>
     </section>
 </body>
+<script src="../assets/js/util.js"></script>
+<script>
+    async function processSubmission() {
+        /** get all selected scopes **/
+        const checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+        const scope = []
+        for (let i = 0; i < checkboxes.length; i++) {
+            scope.push(checkboxes[i].value)
+        }
+
+        const applicationName = document.getElementById("name").value
+        const supportEmail = document.getElementById("email").value
+
+        if (applicationName !== "" && supportEmail !== "" && window.accessToken === undefined) {
+            // show popup or whatever
+        }
+
+
+        /** make web request **/
+        fetch("./../application", {
+            credentials: "include",
+            method: 'POST',
+            cache: "no-cache",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: applicationName, supportEmail, scope, authorizedOrigin: [], authorizedRedirect: []
+            })
+        })
+            .then(parseFetchResponse)
+            .then(({ json, meta }) => {
+                if (json.statusCode === 400) {
+                    alert(`Error creating application, total ${json.message.length} errors.\n\n${json.message.map((m) => m)}`)
+                }
+                else if (json.statusCode === 201) {
+                    window.location.reload()
+                }
+            })
+    }
+
+    /** handle form submission **/
+    document.getElementById("newApplicationForm").addEventListener("submit", (e) => {
+        e.preventDefault()
+        try {
+            processSubmission()
+        } catch (e) {
+            alert("Erorr Creating Application")
+        }
+    })
+
+</script>
 
 </html>
