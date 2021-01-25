@@ -6,6 +6,7 @@ import { isValidObjectId, Model, ObjectId } from 'mongoose';
 import { v4 as generateUUID } from 'uuid';
 import { AuthorizedUser } from 'src/user/interface/user.interface';
 import { User } from 'src/user/user.schema';
+import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
 
 @Injectable()
 export class ApplicationService {
@@ -14,10 +15,11 @@ export class ApplicationService {
   // private readonly applicationRepository: UserRepository,
   constructor(@InjectModel(Application.name) private applicationModel: Model<ApplicationDocument>) {}
 
-  async create(createApplicationDto: CreateApplicationDto, authorizedUser: AuthorizedUser): Promise<Application> {
+  async create(createApplicationDto: CreateApplicationDto, authorizedUser: LoggedInUser): Promise<Application> {
     try {
       const clientSecret = generateUUID();
       const creationDate = new Date();
+
       const newApplication = new this.applicationModel({
         ...createApplicationDto,
         clientSecret,
@@ -28,6 +30,7 @@ export class ApplicationService {
       await newApplication.save();
       return newApplication;
     } catch (e) {
+      console.log(e);
       this.logger.error(e);
       throw new ConflictException(e.message);
     }

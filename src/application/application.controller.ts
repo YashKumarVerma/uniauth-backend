@@ -11,25 +11,26 @@ import {
   Request,
   UnauthorizedException,
   NotFoundException,
+  Logger,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
 import { AuthorizedUser } from 'src/user/interface/user.interface';
 import { ApplicationService } from './application.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 
-@ApiTags('application')
-@ApiBearerAuth('access-token')
-@UseGuards(JwtAuthGuard)
 @Controller('application')
 export class ApplicationController {
+  private readonly logger = new Logger('application');
   constructor(private readonly applicationService: ApplicationService) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
   @UsePipes(ValidationPipe)
   create(@Request() req, @Body() createApplicationDto: CreateApplicationDto) {
-    const user: AuthorizedUser = req.user;
+    const user: LoggedInUser = req.user;
+    this.logger.verbose(`${user.email} creating ${createApplicationDto.name}`);
     return this.applicationService.create(createApplicationDto, user);
   }
 

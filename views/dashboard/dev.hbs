@@ -50,7 +50,7 @@
                             <p class="text-left pl-1">
                                 <small>Client ID</small>
                             </p>
-                            <input type="text" id="clientId" placeholder="Client ID" value="{{_id}}" readonly
+                            <input type="text" placeholder="Client ID" value="{{_id}}" readonly
                                 class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
                         {{!-- client id ends --}}
@@ -60,11 +60,22 @@
                             <p class="text-left pl-1">
                                 <small>Client Secret</small>
                             </p>
-                            <input type="text" id="clientSecret" placeholder="Client Secret" value="{{clientSecret}}"
-                                readonly
+                            <input type="text" placeholder="Client Secret" value="{{clientSecret}}" readonly
                                 class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
                         {{!-- client secret ends --}}
+
+                        {{!-- scope starts --}}
+                        <div class="relative ">
+                            <p class="text-left pl-1">
+                                <small>Redirect URI</small>
+                            </p>
+                            {{#each authorizedRedirect}}
+                            <input type="text" placeholder="Client Secret" value="{{this}}" readonly
+                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                            {{/each}}
+                        </div>
+                        {{!-- scope ends --}}
 
                         {{!-- <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
                             <h3 class="tracking-widest">registrations</h3>
@@ -100,20 +111,28 @@
 
                         {{!-- Application Name --}}
                         <div class="relative ">
-                            <input type="text" id="name" name="name" placeholder="Application Name"
-                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                            <input type="text" id="name" name="name" placeholder="Application Name" required
+                                class=" w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
 
                         {{!-- Support Email --}}
                         <div class="relative ">
-                            <input type="email" id="email" name="email" placeholder="Support Email Address"
-                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                            <input type="email" id="email" name="email" placeholder="Support Email Address" required
+                                class=" w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
 
                         {{!-- Description --}}
                         <div class="relative ">
                             <input type="text" id="description" name="description" placeholder="Description about event"
-                                class="w-full px-4 py-2 mb-1 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                                required
+                                class=" w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                        </div>
+
+                        {{!-- Redirection scope --}}
+                        <div class="relative ">
+                            <input type="text" id="redirectUri" name="redirectUri" required
+                                placeholder="URL to redirect after success"
+                                class=" w-full px-4 py-2 mb-1 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
 
                         {{!-- Scopes --}}
@@ -154,15 +173,16 @@
             scope.push(checkboxes[i].value)
         }
 
-        const applicationName = document.getElementById("name").value
         const supportEmail = document.getElementById("email").value
+        const applicationName = document.getElementById("name").value
         const description = document.getElementById("description").value
+        const authorizedRedirect = document.getElementById("redirectUri").value.split(",")
+        console.log(authorizedRedirect)
 
-        if (applicationName !== "" && supportEmail !== "" && description !== "" && window.accessToken === undefined) {
+        if (applicationName === "" || supportEmail === "" || description === "" || window.accessToken === undefined || authorizedRedirect.length === 0) {
             alert("Invalid Input");
             return false
         }
-
 
         /** make web request **/
         fetch("./../application", {
@@ -173,7 +193,7 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: applicationName, supportEmail, scope, authorizedOrigin: [], authorizedRedirect: [], description
+                name: applicationName, supportEmail, scope, authorizedOrigin: [], authorizedRedirect, description
             })
         })
             .then(parseFetchResponse)
@@ -202,15 +222,6 @@
         document.getElementById("newApplicationSection").style.display = "block"
     })
 
-    const clientIdElement = document.getElementById("clientId");
-    const clientSecretElement = document.getElementById("clientSecret")
-    clientIdElement.addEventListener("click", () => {
-        copyElementValue(clientIdElement)
-    })
-
-    clientSecretElement.addEventListener("click", () => {
-        copyElementValue(clientSecretElement)
-    })
 
 </script>
 

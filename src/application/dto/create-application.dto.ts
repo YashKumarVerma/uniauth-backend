@@ -32,6 +32,7 @@ export class CreateApplicationDto {
     example: ['localhost:5000', 'http://localhost:5000', 'https://localhost:5000/login'],
   })
   @IsArray()
+  @IsNotEmpty()
   authorizedOrigin: Array<string>;
 
   @ApiProperty({
