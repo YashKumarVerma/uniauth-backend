@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from 'src/auth/auth.service';
 import { CreateUserDtoWithCaptcha } from 'src/user/dto/create-user.dto';
+import { ApplicationService } from 'src/application/application.service';
 
 @Controller('account')
 export class AccountController {
@@ -15,6 +16,7 @@ export class AccountController {
     private readonly accountService: AccountService,
     @Inject(UserService) private readonly userService: UserService,
     @Inject(AuthService) private readonly authService: AuthService,
+    @Inject(ApplicationService) private readonly applicationService: ApplicationService,
   ) {}
 
   /**
@@ -63,8 +65,12 @@ export class AccountController {
        * ensure authentication for users
        */
       try {
-        const access_token = await this.accountService.authenticateAndGenerateToken(incomingAuthDto);
-        res.redirect(`${incomingAuthDto.redirect_uri}/?access_token=${access_token}`);
+        const { token, user } = await this.accountService.authenticateAndGenerateToken(incomingAuthDto);
+
+        /** push user into application participant list set */
+        this.applicationService.pushUserIntoApplicationParticipantList(applicationDetails, user);
+        this.userService.pushApplicationIntoUserParticipantList(applicationDetails, user);
+        res.redirect(`${incomingAuthDto.redirect_uri}/?access_token=${token}`);
       } catch (e) {
         /**
          * Render login page with error message from server

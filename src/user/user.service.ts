@@ -10,6 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from 'src/auth/dto/login.dto';
+import { Application } from 'src/application/application.schema';
 
 /**
  * **User Service**
@@ -63,6 +64,20 @@ export class UserService {
       return user;
     } catch (e) {
       throw new ConflictException(e.message);
+    }
+  }
+
+  async pushApplicationIntoUserParticipantList(application: Application, user: User) {
+    try {
+      const result = await this.userModel.findOneAndUpdate(
+        { registrationNumber: user.registrationNumber },
+        {
+          $addToSet: { authorizedApplications: application },
+        },
+      );
+      this.logger.verbose(`Added ${application.name} to ${user.name}`);
+    } catch (e) {
+      this.logger.verbose(`Error adding ${application.name} to ${user.name}`);
     }
   }
 

@@ -1,10 +1,9 @@
 import { CreateApplicationDto } from './dto/create-application.dto';
-import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Application, ApplicationDocument } from './application.schema';
-import { isValidObjectId, Model, ObjectId } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { v4 as generateUUID } from 'uuid';
-import { AuthorizedUser } from 'src/user/interface/user.interface';
 import { User } from 'src/user/user.schema';
 import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
 
@@ -53,6 +52,20 @@ export class ApplicationService {
   async findAllByOwner(user: User): Promise<Array<Application>> {
     const item = await this.applicationModel.find({ admin: user });
     return item;
+  }
+
+  async pushUserIntoApplicationParticipantList(application: Application, user: User) {
+    try {
+      const result = await this.applicationModel.findOneAndUpdate(
+        { name: application.name },
+        {
+          $addToSet: { participants: user },
+        },
+      );
+      this.logger.verbose(`Added ${user.name} to ${application.name}`);
+    } catch (e) {
+      this.logger.error(`Error adding ${user.name} to ${application.name}`);
+    }
   }
 
   remove(id: string) {

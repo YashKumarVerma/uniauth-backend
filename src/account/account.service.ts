@@ -7,6 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { Application } from 'src/application/application.schema';
 import { scopeMapper } from './minions/scopeMapper.minion';
 import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/user.schema';
 
 @Injectable()
 export class AccountService {
@@ -75,7 +76,7 @@ export class AccountService {
   /**
    * Service to a user into servers
    */
-  async authenticateAndGenerateToken(incomingAuthDto: IncomingAuthLoginDto): Promise<string> {
+  async authenticateAndGenerateToken(incomingAuthDto: IncomingAuthLoginDto): Promise<{ token: string; user: User }> {
     /** check username and password */
     const { email, password } = incomingAuthDto;
     const loggedInUser = await this.userService.login({ email, password });
@@ -83,6 +84,6 @@ export class AccountService {
 
     /** generate access token */
     const accessToken = await this.generateAccessToken(incomingAuthDto);
-    return accessToken;
+    return { token: accessToken, user: loggedInUser };
   }
 }

@@ -67,8 +67,8 @@ export class User {
   profile: string[];
 
   /** Applications created by User */
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', required: true })
-  applications: Array<Application>;
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', required: true, default: [] })
+  authorizedApplications: Array<Application>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

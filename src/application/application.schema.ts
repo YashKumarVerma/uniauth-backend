@@ -46,6 +46,10 @@ export class Application {
 
   @Prop({ required: true, type: Date })
   creationDate: Date;
+
+  /** list of participants */
+  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', required: true, default: [] })
+  participants: Array<User>;
 }
 
 export const ApplicationSchema = SchemaFactory.createForClass(Application);

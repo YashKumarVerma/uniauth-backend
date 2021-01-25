@@ -1,7 +1,6 @@
-import { IsEmail, IsNotEmpty, IsUrl, Length, Validate } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { ApplicationScopes } from 'src/auxiliary/validators/applicationScope.validator';
 
 export class IncomingAuthDto {
   /** client ID  */
@@ -17,9 +16,9 @@ export class IncomingAuthDto {
   redirect_uri: string;
 
   /** scope of application */
-  @IsNotEmpty()
-  @Validate(ApplicationScopes)
-  scope: string;
+  //   @IsNotEmpty()
+  //   @Validate(ApplicationScopes)
+  //   scope: string;
 }
 
 export class IncomingAuthLoginDto extends IncomingAuthDto {
