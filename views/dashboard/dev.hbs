@@ -44,14 +44,36 @@
                         </h2>
                         <p class="mb-4 text-base leading-relaxed">{{description}}
                         </p>
-                        <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
+
+                        {{!-- client id starts--}}
+                        <div class="relative ">
+                            <p class="text-left pl-1">
+                                <small>Client ID</small>
+                            </p>
+                            <input type="text" id="clientId" placeholder="Client ID" value="{{_id}}" readonly
+                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                        </div>
+                        {{!-- client id ends --}}
+
+                        {{!-- client secret starts --}}
+                        <div class="relative ">
+                            <p class="text-left pl-1">
+                                <small>Client Secret</small>
+                            </p>
+                            <input type="text" id="clientSecret" placeholder="Client Secret" value="{{clientSecret}}"
+                                readonly
+                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                        </div>
+                        {{!-- client secret ends --}}
+
+                        {{!-- <div class="flex flex-col items-center justify-center px-2 text-center lg:h-32">
                             <h3 class="tracking-widest">registrations</h3>
                             <h2
                                 class="flex items-center justify-center mt-2 mb-4 text-3xl font-bold leading-none text-blue-800 lg:text-6xl">
                                 50
                                 <span class="ml-1 text-base text-gray-600">/mo</span>
                             </h2>
-                        </div>
+                        </div> --}}
                         <button
                             class="flex items-center px-4 py-2 mx-auto mt-auto font-semibold text-black duration-500 ease-in-out transform bg-white border rounded-lg shadow-xl transittion hover:text-white hover:bg-black hover:border-black focus:shadow-outline focus:outline-none">
                             View Details
@@ -85,7 +107,7 @@
                         {{!-- Support Email --}}
                         <div class="relative ">
                             <input type="email" id="email" name="email" placeholder="Support Email Address"
-                                class="w-full px-4 py-2 mb-1 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
                         </div>
 
                         {{!-- Description --}}
@@ -124,7 +146,7 @@
 </body>
 <script src="../assets/js/util.js"></script>
 <script>
-    async function processSubmission() {
+    function processSubmission() {
         /** get all selected scopes **/
         const checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
         const scope = []
@@ -178,6 +200,16 @@
     /** to show new application block only on clicking the button **/
     document.getElementById("newApplicationButton").addEventListener("click", () => {
         document.getElementById("newApplicationSection").style.display = "block"
+    })
+
+    const clientIdElement = document.getElementById("clientId");
+    const clientSecretElement = document.getElementById("clientSecret")
+    clientIdElement.addEventListener("click", () => {
+        copyElementValue(clientIdElement)
+    })
+
+    clientSecretElement.addEventListener("click", () => {
+        copyElementValue(clientSecretElement)
     })
 
 </script>

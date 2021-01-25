@@ -19,3 +19,9 @@ const parseFetchResponse = (response) =>
     json: text,
     meta: response,
   }));
+
+const copyElementValue = (element) => {
+  element.select();
+  element.setSelectionRange(0, 100);
+  document.execCommand('copy');
+};
