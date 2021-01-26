@@ -19,4 +19,4 @@ jwt:
 access_token:
   secret: somethingVerySecure
   issuer: hephaestus
-  expires: 5m
+  expires: 1h

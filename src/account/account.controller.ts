@@ -7,6 +7,7 @@ import { UserService } from 'src/user/user.service';
 import { AuthService } from 'src/auth/auth.service';
 import { CreateUserDtoWithCaptcha } from 'src/user/dto/create-user.dto';
 import { ApplicationService } from 'src/application/application.service';
+import { AccessUserDetailsDto } from './dto/access-user-details.dto';
 
 @Controller('account')
 export class AccountController {
@@ -85,6 +86,12 @@ export class AccountController {
       this.logger.error(`POST ${e.message} for ${client_id}`);
       return res.render('error', e.response);
     }
+  }
+
+  @Post('o/access')
+  @UsePipes(ValidationPipe)
+  async shareUserDetailsViaAuth(@Body() accessUserDetailsDto: AccessUserDetailsDto) {
+    return this.accountService.provideUserDetailOnAccess(accessUserDetailsDto);
   }
 
   /**

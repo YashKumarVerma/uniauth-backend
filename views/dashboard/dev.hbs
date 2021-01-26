@@ -177,7 +177,6 @@
         const applicationName = document.getElementById("name").value
         const description = document.getElementById("description").value
         const authorizedRedirect = document.getElementById("redirectUri").value.split(",")
-        console.log(authorizedRedirect)
 
         if (applicationName === "" || supportEmail === "" || description === "" || window.accessToken === undefined || authorizedRedirect.length === 0) {
             alert("Invalid Input");

@@ -1,5 +1,5 @@
 import { CreateApplicationDto } from './dto/create-application.dto';
-import { BadRequestException, ConflictException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Application, ApplicationDocument } from './application.schema';
 import { isValidObjectId, Model } from 'mongoose';
@@ -29,7 +29,6 @@ export class ApplicationService {
       await newApplication.save();
       return newApplication;
     } catch (e) {
-      console.log(e);
       this.logger.error(e);
       throw new ConflictException(e.message);
     }
@@ -68,7 +67,12 @@ export class ApplicationService {
     }
   }
 
-  remove(id: string) {
-    return this.applicationModel.deleteOne({ _id: id });
+  async findOneByIdAndSecret(id: string, secret: string): Promise<Application> {
+    const result = await this.applicationModel.findOne({ _id: id, clientSecret: secret });
+    if (result === null) {
+      throw new UnauthorizedException('Application not found');
+    }
+
+    return result;
   }
 }
