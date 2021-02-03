@@ -21,7 +21,11 @@ Seems a long process? We have an open issue to [create a docker image](https://g
 ## Creating an Application
 Once you have a server running(use the above steps if not), now you'll need to create a user account and application credentials just like any other user would. The steps are:
 
-- Open [localhost:5000/account/register](http://localhost:5000/account/register) and fill in your details. Enter any random 9 digit word for registraiton number. This is added to demonstrate that custom fields can be added during registration itself.
+- Open [localhost:5000/account/register](http://localhost:5000/account/register) and fill in your details. Enter any random 9 digit word for registration number. This is added to demonstrate that custom fields can be added during registration itself.      
+There are some validations in the system , so kindly follow the following format :        
+Format for registration number : [2 digit year][3 character code][4 digit number]     
+Example: 19BCE2669, 19MIT0001, 20BTC0010 etc.
+
 ![Registration page](https://i.imgur.com/O8mFfss.png)
 
 - The page will ask you to _please check your email for verification link_. The email part is not integrated yet. So nothing to be done here. Head towards login and use the email and password you used to register right now.
