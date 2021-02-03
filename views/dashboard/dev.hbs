@@ -5,8 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dev</title>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/78133145?s=200&v=4">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
 </head>
+<style>
+    .inputWithIcon input[type="text"] {
+        padding-left: 40px;
+    }
+
+    .inputWithIcon {
+        position: relative;
+        align-items: flex-end;
+    }
+
+    .inputWithIcon button {
+        position: absolute;
+        right: 20px;
+        top: 8px;
+        color: #aaa;
+        float: right;
+    }
+
+    .inputWithIcon button :hover {
+        color: #212121;
+    }
+</style>
 
 <body>
     {{!-- dashboard header starts --}}
@@ -50,8 +74,23 @@
                             <p class="text-left pl-1">
                                 <small>Client ID</small>
                             </p>
-                            <input type="text" placeholder="Client ID" value="{{_id}}" readonly
-                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                            <p>
+                                <div class="inputWithIcon">
+
+                                    <input type="text" placeholder="Client ID" id="p1" value="{{_id}}" readonly
+                                        class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                                    </input>
+                                    <button onclick="copyToClipboard('p1')">
+                                        <svg width=" 30" height="24px" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                            <path
+                                                d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                        </svg>
+                                    </button>
+
+                                </div>
+                            </p>
                         </div>
                         {{!-- client id ends --}}
 
@@ -60,8 +99,18 @@
                             <p class="text-left pl-1">
                                 <small>Client Secret</small>
                             </p>
-                            <input type="text" placeholder="Client Secret" value="{{clientSecret}}" readonly
-                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                            <div class="inputWithIcon">
+                                <input type="text" placeholder="Client Secret" id="p2" value="{{clientSecret}}" readonly
+                                    class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                                <button onclick="copyToClipboard('p2')">
+                                    <svg width=" 30" height="24px" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                        <path
+                                            d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         {{!-- client secret ends --}}
 
@@ -71,9 +120,19 @@
                                 <small>Redirect URI</small>
                             </p>
                             {{#each authorizedRedirect}}
-                            <input type="text" placeholder="Client Secret" value="{{this}}" readonly
-                                class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
-                            {{/each}}
+                            <div class="inputWithIcon">
+                                <input type="text" id="p3" placeholder="Client Secret" value="{{this}}" readonly
+                                    class="w-full px-4 py-2 mb-4 mr-4 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0">
+                                {{/each}}
+                                <button onclick="copyToClipboard('#p3')">
+                                    <svg width=" 30" height="24px" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                        <path
+                                            d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         {{!-- scope ends --}}
 
@@ -220,6 +279,9 @@
     document.getElementById("newApplicationButton").addEventListener("click", () => {
         document.getElementById("newApplicationSection").style.display = "block"
     })
+
+    /** To copy to clip board **/
+
 
 
 </script>
