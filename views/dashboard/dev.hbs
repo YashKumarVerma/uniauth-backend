@@ -30,6 +30,10 @@
     .inputWithIcon button :hover {
         color: #212121;
     }
+
+    .del :hover {
+        color: red;
+    }
 </style>
 
 <body>
@@ -280,7 +284,8 @@
 
     /** to show new application block only on clicking the button **/
     document.getElementById("newApplicationButton").addEventListener("click", () => {
-        document.getElementById("newApplicationSection").style.display = "block"
+        document.getElementById("newApplicationSection").style.display = "block";
+        window.scrollTo(0, document.body.scrollHeight);
     })
 
     /** To copy to clip board **/
