@@ -20,7 +20,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docs:compodoc": "./node_modules/@compodoc/compodoc/bin/index-cli.js -p tsconfig.json"
+    "docs:compodoc": "compodoc -p tsconfig.json -s",
+    "build:doc": "./node_modules/.bin/compodoc-p libs/core/tsconfig.lib.json--theme Readthedocs-d dist/apps/documentation/compodoc ",
+    "serve:doc": "./node_modules/.bin/compodoc-p libs/core/tsconfig.lib.json--theme Readthedocs-d dist/apps/documentation/compodoc-s"
   },
   "dependencies": {
     "@compodoc/compodoc": "^1.1.11",
