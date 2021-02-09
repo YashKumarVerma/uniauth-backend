@@ -33,11 +33,11 @@
     <section class="text-gray-700 body-font p-10">
         This page shows applications that are authorized to access your data. <br /><br />
         Currently <b>{{user.authorizedApplications.length}} applications</b> have access to your data.
-        <ul>
             {{#each app.items}}
-                    <li>{{name}}</li> 
+                    <ul><b>{{name}}</b></ul> 
+                    <li>Support Email - {{supportEmail}}</li>
+                    <li>Scope - {{scope}}</li>
             {{/each}}
-        </ul>
     </section>
 
 </body>
