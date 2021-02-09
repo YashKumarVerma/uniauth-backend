@@ -53,6 +53,11 @@ export class ApplicationService {
     return item;
   }
 
+  async findAllByParticipant(user: User): Promise<Array<Application>> {
+    const item = await this.applicationModel.find({ participants: user });
+    return item;
+  }
+
   async pushUserIntoApplicationParticipantList(application: Application, user: User) {
     try {
       const result = await this.applicationModel.findOneAndUpdate(

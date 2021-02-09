@@ -52,7 +52,12 @@ export class DashboardController {
   async showData(@Request() req, @Res() res: Response) {
     const loggedInUser: LoggedInUser = req.user;
     const user = await this.userService.findOneById(loggedInUser.id);
-    return res.render('dashboard/data.hbs', { user });
+    const applications = await this.applicationService.findAllByParticipant(user);
+    return res.render('dashboard/data.hbs', { user, 
+      app: {
+      scope: SCOPE,
+      items: applications,
+    }, });
   }
 
   /**
