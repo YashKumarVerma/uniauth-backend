@@ -6,6 +6,8 @@
 The detailed objective is available on the [/UniAuth](https://github.com/UniAuth/UniAuth) repository. 
 
 ---
+## Docs
+- Code Documentation: [Compodocs](http://uniauth.surge.sh/)
 
 ## Running on Local System
 Running the project on local system is **strongly recommended**, even if you are not working on the backend. This is becuase to test the middlewars, client applications, or any other component, an instance of UniAuth OAuth server is required. Make sure that you have a mongodb instance running. This step might be different depending on your installation type. If you do not have mongodb database installed, refer [this link](https://docs.mongodb.com/manual/administration/install-community/)
