@@ -1,13 +1,13 @@
 import { Controller, Get, Logger, Res, UseGuards, Request, Inject } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { UserService } from 'src/user/user.service';
-import { AuthorizedUser } from 'src/user/interface/user.interface';
-import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
-import { SCOPE } from 'src/account/minions/scopeMapper.minion';
-import { ApplicationModule } from 'src/application/application.module';
-import { ApplicationService } from 'src/application/application.service';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { UserService } from '../user/user.service';
+import { AuthorizedUser } from '../user/interface/user.interface';
+import { LoggedInUser } from '../auth/interface/loggedInUser.interface';
+import { SCOPE } from '../account/minions/scopeMapper.minion';
+import { ApplicationModule } from '../application/application.module';
+import { ApplicationService } from '../application/application.service';
 
 @Controller('dashboard')
 export class DashboardController {
@@ -53,11 +53,13 @@ export class DashboardController {
     const loggedInUser: LoggedInUser = req.user;
     const user = await this.userService.findOneById(loggedInUser.id);
     const applications = await this.applicationService.findAllByParticipant(user);
-    return res.render('dashboard/data.hbs', { user, 
+    return res.render('dashboard/data.hbs', {
+      user,
       app: {
-      scope: SCOPE,
-      items: applications,
-    }, });
+        scope: SCOPE,
+        items: applications,
+      },
+    });
   }
 
   /**

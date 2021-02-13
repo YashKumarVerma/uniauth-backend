@@ -5,12 +5,11 @@ import { ConflictException, Injectable, Logger, NotFoundException, UnauthorizedE
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './user.schema';
-import { UserRepository } from './user.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from 'src/auth/dto/login.dto';
-import { Application } from 'src/application/application.schema';
+import { LoginDto } from '../auth/dto/login.dto';
+import { Application } from '../application/application.schema';
 
 /**
  * **User Service**
@@ -25,10 +24,7 @@ import { Application } from 'src/application/application.schema';
 export class UserService {
   private readonly logger = new Logger('user');
 
-  constructor(
-    private readonly userRepository: UserRepository,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   /** funciton to facilitate user login */
   async login(loginDto: LoginDto): Promise<any> {
