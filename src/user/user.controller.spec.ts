@@ -1,14 +1,16 @@
+/**
+ * https://github.com/jmcdo29/testing-nestjs
+ */
 import { Test, TestingModule } from '@nestjs/testing';
-import { User, UserSchema } from './user.schema';
 import { closeInMongodConnection, rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
+import { UserSchema } from './user.schema';
 import { UserService } from './user.service';
 
 describe('UserController', () => {
   let controller: UserController;
-  let service: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
