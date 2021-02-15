@@ -6,7 +6,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
 import { UserRepository } from './user.repository';
-import {DashboardModule} from 'src/dashboard/dashboard.module'
+import { DashboardModule } from 'src/dashboard/dashboard.module';
 import { UserService } from './user.service';
 
 @Module({
@@ -21,8 +21,7 @@ import { UserService } from './user.service';
           return schema;
         },
       },
-    ])
-    
+    ]),
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],

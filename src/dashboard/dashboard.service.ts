@@ -20,8 +20,6 @@ export class DashboardService {
     return `This action updates a #${id} dashboard`;
   }
 
-  
-
   remove(id: number) {
     return `This action removes a #${id} dashboard`;
   }

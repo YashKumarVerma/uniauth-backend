@@ -45,7 +45,7 @@ export class DashboardController {
     return res.render('dashboard/profile.hbs', { user });
   }
   /**
-   * To load data tab 
+   * To load data tab
    */
   @Get('/data')
   @UseGuards(JwtAuthGuard)
@@ -53,11 +53,13 @@ export class DashboardController {
     const loggedInUser: LoggedInUser = req.user;
     const user = await this.userService.findOneById(loggedInUser.id);
     const applications = await this.applicationService.findAllByParticipant(user);
-    return res.render('dashboard/data.hbs', { user, 
+    return res.render('dashboard/data.hbs', {
+      user,
       app: {
-      scope: SCOPE,
-      items: applications,
-    }, });
+        scope: SCOPE,
+        items: applications,
+      },
+    });
   }
 
   /**
