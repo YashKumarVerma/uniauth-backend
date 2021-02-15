@@ -17,7 +17,7 @@ import { accessTokenJwtConstants } from './constants/access_token.constants';
     ApplicationModule,
     UserModule,
     AuthModule,
-    MailerModule
+    MailerModule,
   ],
   controllers: [AccountController],
   providers: [AccountService],

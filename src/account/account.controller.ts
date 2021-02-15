@@ -171,19 +171,17 @@ export class AccountController {
     }
   }
 
-
   @Post('/password/request')
   @UsePipes(ValidationPipe)
   async processRequestPage(@Res() res: Response, @Body() requestPasswordResetDto: RequestPasswordResetDto) {
     try {
-
       const response = await this.userService.request(requestPasswordResetDto);
       const templateData = {
         server: {
           message: 'please check your email for password reset link',
         },
       };
-      this.mailerService.sendPasswordResetLink(response.collegeEmail)
+      this.mailerService.sendPasswordResetLink(response.collegeEmail);
       return res.render('account/login', templateData);
     } catch (e) {
       const templateData = {
@@ -196,19 +194,22 @@ export class AccountController {
   @Get('/password/reset/:token')
   async showPasswordResetPage(@Res() res: Response, @Param('token') token: string) {
     try {
-      this.mailerService.checkPasswordResetToken(token)
+      this.mailerService.checkPasswordResetToken(token);
       return res.render('password/reset');
     } catch (e) {
       return res.render('error', e.response);
     }
   }
 
-
   @Post('/password/reset/:token')
-  async processResetPage(@Res() res: Response,@Param('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
+  async processResetPage(
+    @Res() res: Response,
+    @Param('token') token: string,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
     try {
-     const isValidToken = await this.mailerService.checkPasswordResetToken(token)
-      const response = await this.userService.reset(resetPasswordDto,isValidToken);
+      const isValidToken = await this.mailerService.checkPasswordResetToken(token);
+      const response = await this.userService.reset(resetPasswordDto, isValidToken);
       const templateData = {
         server: {
           message: 'password changed successfully',
@@ -267,8 +268,4 @@ export class AccountController {
       return res.render('account/register', templateData);
     }
   }
- 
-
-  
-
 }

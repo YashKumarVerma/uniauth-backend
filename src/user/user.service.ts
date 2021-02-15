@@ -41,7 +41,6 @@ export class UserService {
     if (user === null) {
       throw new NotFoundException('user not found');
     }
-   
 
     const hashCheck = await bcrypt.compareSync(password, user.password);
     if (hashCheck === true) {
@@ -70,33 +69,26 @@ export class UserService {
     }
   }
 
-
-
-  
   async request(requestPasswordResetDto: RequestPasswordResetDto): Promise<User> {
-    const { email} = requestPasswordResetDto;
+    const { email } = requestPasswordResetDto;
 
     const user = await this.userModel.findOne({ collegeEmail: email }).select('collegeEmail');
-  if (user === null) {
-    throw new NotFoundException('user not found');
-  }
-  else{
-    return user
-  }
-  }
-
-
-
-  async reset(resetPasswordDto: ResetPasswordDto,isValidToken): Promise<User> {
-    let { password_1,password_2} = resetPasswordDto;
-    password_1 = await bcrypt.hashSync(password_1, 10)
-    const user = await this.userModel.findOneAndUpdate(isValidToken.id,{password : password_1});
     if (user === null) {
-    throw new NotFoundException('user not found');
+      throw new NotFoundException('user not found');
+    } else {
+      return user;
+    }
   }
-  else{
-    return user;
-  }
+
+  async reset(resetPasswordDto: ResetPasswordDto, isValidToken): Promise<User> {
+    let { password_1, password_2 } = resetPasswordDto;
+    password_1 = await bcrypt.hashSync(password_1, 10);
+    const user = await this.userModel.findOneAndUpdate(isValidToken.id, { password: password_1 });
+    if (user === null) {
+      throw new NotFoundException('user not found');
+    } else {
+      return user;
+    }
   }
 
   async pushApplicationIntoUserParticipantList(application: Application, user: User) {
@@ -122,7 +114,6 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-
     let { name, collegeEmail, registrationNumber } = updateUserDto;
     const regNumber = new RegistrationNumberWorker(registrationNumber);
     const branch = regNumber.getBranch();
@@ -136,10 +127,9 @@ export class UserService {
     }
     if (registrationNumber) {
       user.registrationNumber = registrationNumber;
-      user.branch = branch,
-      user.batch = batch
+      (user.branch = branch), (user.batch = batch);
     }
-    user.save()
+    user.save();
 
     return user;
   }

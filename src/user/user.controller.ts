@@ -18,7 +18,7 @@ import {
   Injectable,
   Inject,
 } from '@nestjs/common';
-import {DashboardController} from '../dashboard/dashboard.controller'
+import { DashboardController } from '../dashboard/dashboard.controller';
 import { response, Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -44,7 +44,10 @@ import { AuthorizedUser } from './interface/user.interface';
 @Controller('user')
 export class UserController {
   private readonly logger = new Logger('user');
-  constructor(private readonly userService: UserService , @Inject(DashboardController) private readonly DashboardController: DashboardController) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject(DashboardController) private readonly DashboardController: DashboardController,
+  ) {}
 
   /**
    * Responds to: _POST(`/`)_
@@ -83,23 +86,26 @@ export class UserController {
    *
    * To update details of user
    */
-   /**
+  /**
    * To load edit form
    */
   @Get('/:id/edit')
-
   @UseGuards(JwtAuthGuard)
-  async showEditForm(@Request() req,@Res() res: Response,@Param('id') id: string){
+  async showEditForm(@Request() req, @Res() res: Response, @Param('id') id: string) {
     const user = await this.userService.findOneById(id);
-    return res.render('profile/edit.hbs',{ user })
+    return res.render('profile/edit.hbs', { user });
   }
 
   @Post('/:id/edit')
-
   @UseGuards(JwtAuthGuard)
-  async PostEditForm(@Body() updateUserDto: UpdateUserDto, @Request() req,@Res() res: Response,@Param('id') id: string){
+  async PostEditForm(
+    @Body() updateUserDto: UpdateUserDto,
+    @Request() req,
+    @Res() res: Response,
+    @Param('id') id: string,
+  ) {
     const user = await this.userService.update(id, updateUserDto);
-    return res.redirect('/dashboard/')
+    return res.redirect('/dashboard/');
   }
 
   /**

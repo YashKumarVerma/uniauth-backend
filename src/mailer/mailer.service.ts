@@ -88,8 +88,6 @@ export class MailerService {
       },
     });
 
-    
-
     const token = await this.generateJwt({ email });
     const link = `http://localhost:5000/account/password/reset/${token}`;
 
