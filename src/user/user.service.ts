@@ -24,7 +24,7 @@ import { Application } from '../application/application.schema';
 export class UserService {
   private readonly logger = new Logger('user');
 
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
   /** funciton to facilitate user login */
   async login(loginDto: LoginDto): Promise<any> {
