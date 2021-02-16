@@ -5,12 +5,11 @@ import { ConflictException, Injectable, Logger, NotFoundException, UnauthorizedE
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './user.schema';
-import { UserRepository } from './user.repository';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from 'src/auth/dto/login.dto';
-import { Application } from 'src/application/application.schema';
+import { LoginDto } from '../auth/dto/login.dto';
+import { Application } from '../application/application.schema';
 import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 
@@ -27,10 +26,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 export class UserService {
   private readonly logger = new Logger('user');
 
-  constructor(
-    private readonly userRepository: UserRepository,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
   /** funciton to facilitate user login */
   async login(loginDto: LoginDto): Promise<any> {
@@ -81,7 +77,7 @@ export class UserService {
   }
 
   async reset(resetPasswordDto: ResetPasswordDto, isValidToken): Promise<User> {
-    let { password_1, password_2 } = resetPasswordDto;
+    let { password_1 } = resetPasswordDto;
     password_1 = await bcrypt.hashSync(password_1, 10);
     const user = await this.userModel.findOneAndUpdate(isValidToken.id, { password: password_1 });
     if (user === null) {
@@ -114,11 +110,11 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    let { name, collegeEmail, registrationNumber } = updateUserDto;
+    const { name, collegeEmail, registrationNumber } = updateUserDto;
     const regNumber = new RegistrationNumberWorker(registrationNumber);
     const branch = regNumber.getBranch();
     const batch = regNumber.getYear();
-    let user = await this.findOneById(id);
+    const user = await this.findOneById(id);
     if (name) {
       user.name = name;
     }

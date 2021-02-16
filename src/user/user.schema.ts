@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { Application } from 'src/application/application.schema';
+import { Application } from '../application/application.schema';
 import { Document } from 'mongoose';
 export type UserDocument = User & Document;
 @Schema()
