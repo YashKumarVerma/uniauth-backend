@@ -58,12 +58,6 @@ describe('UserController', () => {
     });
   });
 
-  describe('.update()', () => {
-    it('should be defined', () => {
-      expect(controller.update).toBeDefined();
-    });
-  });
-
   describe('.remove()', () => {
     it('should be defined', () => {
       expect(controller.remove).toBeDefined();

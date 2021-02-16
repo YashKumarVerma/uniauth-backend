@@ -1,11 +1,12 @@
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { User, UserSchema } from '../user/user.schema';
+
 import { MailerController } from './mailer.controller';
 import { MailerService } from './mailer.service';
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { confirmEmailTokenConstants } from './constants/confirmEmailToken.constants';
-import { UserModule } from 'src/user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/user/user.schema';
+import { UserModule } from '../user/user.module';
+import { confirmEmailTokenConstants } from './constants/confirmEmailToken.constants';
 
 @Module({
   imports: [

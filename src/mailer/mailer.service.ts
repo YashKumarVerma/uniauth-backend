@@ -5,8 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { Model, ObjectId } from 'mongoose';
 import { confirmEmailTokenConstants } from './constants/confirmEmailToken.constants';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from 'src/user/user.schema';
-import { UserService } from 'src/user/user.service';
+import { User, UserDocument } from '../user/user.schema';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class MailerService {

@@ -20,10 +20,10 @@ import { AuthService } from '../auth/auth.service';
 import { CreateUserDtoWithCaptcha } from '../user/dto/create-user.dto';
 import { ApplicationService } from '../application/application.service';
 import { AccessUserDetailsDto } from './dto/access-user-details.dto';
-import { MailerService } from 'src/mailer/mailer.service';
+import { MailerService } from '../mailer/mailer.service';
 import { findConfigFile } from 'typescript';
-import { RequestPasswordResetDto } from 'src/user/dto/request-password-reset.dto';
-import { ResetPasswordDto } from 'src/user/dto/reset-password.dto';
+import { RequestPasswordResetDto } from '../user/dto/request-password-reset.dto';
+import { ResetPasswordDto } from '../user/dto/reset-password.dto';
 
 @Controller('account')
 export class AccountController {
