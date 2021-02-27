@@ -37,6 +37,9 @@
                     <ul><b>{{name}}</b></ul> 
                     <li>Support Email - {{supportEmail}}</li>
                     <li>Scope - {{scope}}</li>
+                    {{#each participants}}
+                    {{this.name}}
+                    {{/each}}
             {{/each}}
     </section>
 
