@@ -5,6 +5,7 @@ import { UserService } from '../user/user.service';
 import { LoggedInUser } from '../auth/interface/loggedInUser.interface';
 import { SCOPE } from '../account/minions/scopeMapper.minion';
 import { ApplicationService } from '../application/application.service';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
 import { appData } from '../../config/appData';
 
 @Controller('dashboard')
@@ -85,8 +86,35 @@ export class DashboardController {
     const loggedInUser: LoggedInUser = req.user;
     const user = await this.applicationService.findOneById(id);
     if (JSON.stringify(user.admin) === JSON.stringify(loggedInUser.id)) {
-      const action = await this.applicationService.delete(id);
+      await this.applicationService.delete(id);
     }
     res.redirect('/dashboard/dev');
+  }
+
+  @Get('/:id/edit')
+  @UseGuards(JwtAuthGuard)
+  async showEditForm(@Res() res: Response, @Param('id') id: string) {
+    const user = await this.userService.findOneById(id);
+    return res.render('profile/edit.hbs', { user });
+  }
+
+  @Post('/:id/edit')
+  @UseGuards(JwtAuthGuard)
+  async PostEditForm(@Res() res: Response, @Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    await this.userService.update(id, updateUserDto);
+    return res.redirect('/dashboard/');
+  }
+
+  @Get('/dev/details/:id')
+  @UseGuards(JwtAuthGuard)
+  async showUserList(@Request() req, @Res() res: Response, @Param('id') id: string) {
+    try {
+      const userDetails = await this.applicationService.findUsersGrantedAccess(id);
+      res.render('dashboard/details.hbs', {
+        userDetails: userDetails.participants,
+      });
+    } catch (e) {
+      res.render('error.hbs');
+    }
   }
 }
