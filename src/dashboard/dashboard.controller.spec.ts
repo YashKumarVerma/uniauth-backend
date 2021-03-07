@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DashboardController } from './dashboard.controller';
 import { UserService } from '../user/user.service';
-import {ApplicationService} from '../application/application.service'
+import { ApplicationService } from '../application/application.service';
 
 describe('DashboardController', () => {
   let controller: DashboardController;
@@ -22,7 +22,7 @@ describe('DashboardController', () => {
             remove: jest.fn(() => true),
           }),
         },
-       { 
+        {
           provide: ApplicationService,
           useFactory: () => ({
             create: jest.fn(() => true),
@@ -32,8 +32,8 @@ describe('DashboardController', () => {
             findAllByParticipant: jest.fn(() => true),
             pushUserIntoApplicationParticipantList: jest.fn(() => true),
             findOneByIdAndSecret: jest.fn(() => true),
-          })
-        }
+          }),
+        },
       ],
     }).compile();
 
@@ -49,20 +49,19 @@ describe('DashboardController', () => {
       expect(controller.showDashboard).toBeDefined();
     });
   });
-  describe('.showProfile()',() => {
-    it('should be defined',() => {
+  describe('.showProfile()', () => {
+    it('should be defined', () => {
       expect(controller.showProfile).toBeDefined();
     });
   });
-  describe('.showData()',() => {
-    it('should be defined',() => {
+  describe('.showData()', () => {
+    it('should be defined', () => {
       expect(controller.showData).toBeDefined();
     });
   });
-  describe('.showDev()',() => {
-    it('should be defined',() => {
+  describe('.showDev()', () => {
+    it('should be defined', () => {
       expect(controller.showDev).toBeDefined();
     });
   });
-
 });

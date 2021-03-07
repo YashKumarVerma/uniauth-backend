@@ -1,20 +1,16 @@
-import { getModelToken } from '@nestjs/mongoose';
-import { User, UserDocument } from '../user/user.schema';
-import { Model } from 'mongoose';
+import { AuthService } from './auth.service';
+import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { TestingModule } from '@nestjs/testing/testing-module';
-import { AuthService } from './auth.service';
-import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
-import { UserService } from '../user/user.service';
 import { UserModule } from '../user/user.module';
-import { JwtModule } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
 import { newJWTConstants } from './constants/auth.constants';
+import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
 
 /** mocking definitions */
 describe('Auth Service', () => {
   let testingModule: TestingModule;
   let service: AuthService;
-  let model: Model<UserDocument>;
 
   beforeEach(async () => {
     testingModule = await Test.createTestingModule({
@@ -38,7 +34,7 @@ describe('Auth Service', () => {
     }).compile();
 
     service = testingModule.get<AuthService>(AuthService);
-    model = testingModule.get<Model<UserDocument>>(getModelToken(User.name));
+    // model = testingModule.get<Model<UserDocument>>(getModelToken(User.name));
   });
 
   afterEach(() => {

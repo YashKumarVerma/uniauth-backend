@@ -9,7 +9,7 @@ import { TestingModule } from '@nestjs/testing/testing-module';
 import { UserService } from './user.service';
 import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
 
-const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
+const mockUser = (): Partial<UserDocument> => ({
   name: 'some user',
   batch: '19',
   branch: 'BCE',
@@ -29,7 +29,7 @@ const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
 describe('User Service', () => {
   let testingModule: TestingModule;
   let service: UserService;
-  let model: Model<UserDocument>;
+  //   let model: Model<UserDocument>;
 
   beforeEach(async () => {
     testingModule = await Test.createTestingModule({
