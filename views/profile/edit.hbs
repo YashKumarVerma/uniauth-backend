@@ -27,62 +27,53 @@
                 </a>
         </div>
     </header>
-    <div class="container">
-        <div class="row">
-            <h1 style="text-align:center;">
-                Edit Profile Details
-            </h1>
-            <div class=" flex items-center justify-center">
-
-                <form id="form" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-                    action="/dashboard/{{user._id}}/edit" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-                            Name
-                        </label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            name="name" id="name" type="text" value="{{user.name}}" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-                            College Email
-                        </label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            name="collegeEmail" id="email" type="email" value="{{user.collegeEmail}}" required>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="resistrationNum">
-                            registration Number
-                        </label>
-                        <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            name="registrationNumber" id="resistrationNum" type="text"
-                            value="{{user.registrationNumber}}" required>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <button id="submit"
-                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit">
-                            Submit
-                        </button>
-                    </div>
-
-                    <div class="mb-4">
 
 
-                </form>
+    <div class="row">
+        <h1 class=" text-blue-800 text-center font-semibold mt-20" style="font-size:xx-large">Edit Profile Details
+        </h1><br />
+        <div class=" flex items-center justify-center ">
+            <form id="form" class="bg-white w-3/12 shadow-2xl border rounded px-8 pt-6 pb-8 mb-8 ;"
+                action="/dashboard/{{user._id}}/edit" method="POST">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
+                        Name
+                    </label>
+                    <input
+                        class="shadow appearance-gray border rounded w-full py-2 px-3 text-black-700 leading-tight bg-gray-200 focus:shadow-outline"
+                        name="name" id="name" type="text" value="{{user.name}}" required>
+                </div>
 
-            </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                        College Email
+                    </label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-black-700 leading-tight bg-gray-200 focus:shadow-outline"
+                        name="collegeEmail" id="email" type="email" value="{{user.collegeEmail}}" required>
+                </div>
 
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="resistrationNum">
+                        Registration Number
+                    </label>
+                    <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-black-700 leading-tight bg-gray-200 focus:shadow-outline"
+                        name="registrationNumber" id="resistrationNum" type="text" value="{{user.registrationNumber}}"
+                        required>
 
+                </div><br />
+                <div class="flex items-center justify-center">
+                    <button id="submit"
+                        class="bg-green-700 hover:bg-green-500 text-white font-bold py-2 px-4 rounded focus:bg-gray-50 focus:shadow-outline"
+                        type="submit">
+                        Submit
+                    </button>
+                </div>
+                <div class="mb-4">
+            </form>
         </div>
-
-
+    </div>
     </div>
 
 </body>
