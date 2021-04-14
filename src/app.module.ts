@@ -14,6 +14,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { mongooseConfig } from './config/mongoose.config';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 
 /**
  * Main Application Module
@@ -27,6 +29,19 @@ import { DashboardModule } from './dashboard/dashboard.module';
     AuthModule,
     AccountModule,
     DashboardModule,
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            nestWinstonModuleUtilities.format.nestLike(),
+            winston.format.colorize(),
+          ),
+        }),
+        new winston.transports.File({ filename: 'application.log' }),
+        new winston.transports.File({ filename: 'error.log', level: 'error' }),
+      ],
+    }),
   ],
   controllers: [AppController],
 })

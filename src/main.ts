@@ -8,6 +8,10 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 import { join } from 'path';
+import { WinstonModule } from 'nest-winston';
+import { LoggerConfig } from './logger/LoggerConfig';
+
+const logger: LoggerConfig = new LoggerConfig();
 
 /**
  * Bootstrap application by attaching middleware and initializing auxillary services
@@ -16,7 +20,7 @@ import { join } from 'path';
 async function bootstrap() {
   /** set the logging levels */
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ['log', 'error', 'warn', 'verbose'],
+    logger: WinstonModule.createLogger(logger.console()),
   });
 
   /** configuring public and views directory */
