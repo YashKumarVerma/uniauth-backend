@@ -21,13 +21,14 @@ import { CreateUserDtoWithCaptcha } from '../user/dto/create-user.dto';
 import { ApplicationService } from '../application/application.service';
 import { AccessUserDetailsDto } from './dto/access-user-details.dto';
 import { MailerService } from '../mailer/mailer.service';
-import { findConfigFile } from 'typescript';
 import { RequestPasswordResetDto } from '../user/dto/request-password-reset.dto';
 import { ResetPasswordDto } from '../user/dto/reset-password.dto';
+import { appData } from '../../config/appData';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Controller('account')
 export class AccountController {
-  private readonly logger = new Logger('account');
+  // private readonly logger = new Logger('account');
 
   constructor(
     private readonly accountService: AccountService,
@@ -35,6 +36,7 @@ export class AccountController {
     @Inject(AuthService) private readonly authService: AuthService,
     @Inject(ApplicationService) private readonly applicationService: ApplicationService,
     @Inject(MailerService) private readonly mailerService: MailerService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger = new Logger('account'),
   ) {}
 
   /**
@@ -54,7 +56,7 @@ export class AccountController {
     const { client_id } = incomingAuthDto;
     try {
       const applicationDetails = await this.accountService.validateAccessRequest(incomingAuthDto);
-      return res.render('account/o/login', { app: applicationDetails });
+      return res.render('account/o/login', { app: applicationDetails, project_name: appData.Name });
     } catch (e) {
       this.logger.error(`${e.message} for ${client_id}`);
       return res.render('error', e.response);
@@ -94,7 +96,11 @@ export class AccountController {
          * Render login page with error message from server
          */
         this.logger.error(`${e.message} for ${client_id}`);
-        return res.render('account/o/login', { app: applicationDetails, server: { message: e.message } });
+        return res.render('account/o/login', {
+          app: applicationDetails,
+          project_name: appData.Name,
+          server: { message: e.message },
+        });
       }
     } catch (e) {
       /**
@@ -125,7 +131,7 @@ export class AccountController {
   )
   async showLoginPage(@Res() res: Response) {
     try {
-      return res.render('account/login');
+      return res.render('account/login', { project_name: appData.Name });
     } catch (e) {
       return res.render('error', e.response);
     }
@@ -155,7 +161,7 @@ export class AccountController {
       //   res.render('profile/homepage', user);
       res.redirect('./../dashboard');
     } catch (e) {
-      return res.render('account/login', { server: { message: e.message } });
+      return res.render('account/login', { server: { message: e.message }, project_name: appData.Name });
     }
   }
 
@@ -165,7 +171,7 @@ export class AccountController {
   @Get('/password/request')
   async showPasswordRequestPage(@Res() res: Response) {
     try {
-      return res.render('password/request');
+      return res.render('password/request', { project_name: appData.Name });
     } catch (e) {
       return res.render('error', e.response);
     }
@@ -182,7 +188,7 @@ export class AccountController {
         },
       };
       this.mailerService.sendPasswordResetLink(response.collegeEmail);
-      return res.render('account/login', templateData);
+      return res.render('account/login', { templateData, project_name: appData.Name });
     } catch (e) {
       const templateData = {
         server: e.response,
@@ -195,7 +201,7 @@ export class AccountController {
   async showPasswordResetPage(@Res() res: Response, @Param('token') token: string) {
     try {
       this.mailerService.checkPasswordResetToken(token);
-      return res.render('password/reset');
+      return res.render('password/reset', { project_name: appData.Name });
     } catch (e) {
       return res.render('error', e.response);
     }
@@ -209,13 +215,13 @@ export class AccountController {
   ) {
     try {
       const isValidToken = await this.mailerService.checkPasswordResetToken(token);
-      const response = await this.userService.reset(resetPasswordDto, isValidToken);
+      await this.userService.reset(resetPasswordDto, isValidToken);
       const templateData = {
         server: {
           message: 'password changed successfully',
         },
       };
-      return res.render('account/login', templateData);
+      return res.render('account/login', { templateData, project_name: appData.Name });
     } catch (e) {
       const templateData = {
         server: e.response,
@@ -230,7 +236,7 @@ export class AccountController {
   @Get('/register')
   async showRegisterPage(@Res() res: Response) {
     try {
-      return res.render('account/register');
+      return res.render('account/register', { project_name: appData.Name });
     } catch (e) {
       return res.render('error', e.response);
     }
@@ -260,12 +266,12 @@ export class AccountController {
         },
       };
       this.mailerService.sendEmail(response.collegeEmail);
-      return res.render('account/register', templateData);
+      return res.render('account/register', { templateData, project_name: appData.Name });
     } catch (e) {
       const templateData = {
         server: e.response,
       };
-      return res.render('account/register', templateData);
+      return res.render('account/register', { templateData, project_name: appData.Name });
     }
   }
 }

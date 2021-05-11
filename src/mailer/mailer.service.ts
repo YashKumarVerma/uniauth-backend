@@ -2,20 +2,22 @@ import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/commo
 import * as config from 'config';
 import * as nodemailer from 'nodemailer';
 import { JwtService } from '@nestjs/jwt';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { confirmEmailTokenConstants } from './constants/confirmEmailToken.constants';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../user/user.schema';
 import { UserService } from '../user/user.service';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class MailerService {
-  private readonly logger = new Logger('mailer');
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
     @Inject(UserService)
     private readonly userService: UserService,
+    @Inject(WINSTON_MODULE_PROVIDER)
+    private readonly logger = new Logger('mailer'),
   ) {}
 
   /**
@@ -68,7 +70,7 @@ export class MailerService {
     const token = await this.generateJwt({ email });
     const link = `http://localhost:5000/account/register/verify/${token}`;
 
-    const mailDetails = await transporter.sendMail({
+    await transporter.sendMail({
       from: 'ultimateraze011@gmail.com', // sender address
       to: email, // list of receivers
       subject: 'Hello ✔', // Subject line
@@ -91,7 +93,7 @@ export class MailerService {
     const token = await this.generateJwt({ email });
     const link = `http://localhost:5000/account/password/reset/${token}`;
 
-    const mailDetails = await transporter.sendMail({
+    await transporter.sendMail({
       from: 'ultimateraze011@gmail.com', // sender address
       to: email, // list of receivers
       subject: 'Hello ✔', // Subject line

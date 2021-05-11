@@ -1,14 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { Model, model } from 'mongoose';
-import { User, UserDocument, UserSchema } from '../user/user.schema';
-import { ApplicationService } from './application.service';
-import { getModelToken, MongooseModule } from '@nestjs/mongoose';
-import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
 import * as mongooseUniquevalidator from 'mongoose-unique-validator';
-import { UserService } from '../user/user.service';
-import { Application, ApplicationSchema } from './application.schema';
 
-const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
+import { Application, ApplicationSchema } from './application.schema';
+import { MongooseModule, getModelToken } from '@nestjs/mongoose';
+import { WinstonModule } from 'nest-winston';
+import { Test, TestingModule } from '@nestjs/testing';
+import { User, UserDocument, UserSchema } from '../user/user.schema';
+
+import { ApplicationService } from './application.service';
+import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
+import { LoggerConfig } from '../logger/LoggerConfig';
+
+const logger: LoggerConfig = new LoggerConfig();
+
+const mockUser = (): Partial<UserDocument> => ({
   name: 'some user',
   batch: '19',
   branch: 'BCE',
@@ -19,7 +23,6 @@ const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
 describe('ApplicationService', () => {
   let testingModule: TestingModule;
   let service: ApplicationService;
-  let model: Model<UserDocument>;
 
   beforeEach(async () => {
     testingModule = await Test.createTestingModule({
@@ -43,6 +46,7 @@ describe('ApplicationService', () => {
             },
           },
         ]),
+        WinstonModule.forRoot(logger.console()),
       ],
       providers: [
         ApplicationService,
@@ -59,7 +63,6 @@ describe('ApplicationService', () => {
     }).compile();
 
     service = testingModule.get<ApplicationService>(ApplicationService);
-    model = testingModule.get<Model<UserDocument>>(getModelToken(User.name));
   });
 
   afterEach(() => {

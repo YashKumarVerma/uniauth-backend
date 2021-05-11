@@ -1,17 +1,27 @@
 import { CreateApplicationDto } from './dto/create-application.dto';
-import { BadRequestException, ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Application, ApplicationDocument } from './application.schema';
 import { isValidObjectId, Model } from 'mongoose';
 import { v4 as generateUUID } from 'uuid';
-import { User } from '../user/user.schema';
+import { User, UserDocument } from '../user/user.schema';
 import { LoggedInUser } from '../auth/interface/loggedInUser.interface';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class ApplicationService {
-  private readonly logger = new Logger('application');
-
-  constructor(@InjectModel(Application.name) private applicationModel: Model<ApplicationDocument>) {}
+  constructor(
+    @InjectModel(Application.name) private applicationModel: Model<ApplicationDocument>,
+    @InjectModel('User') private userModel: Model<UserDocument>,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger = new Logger('application'),
+  ) {}
 
   async create(createApplicationDto: CreateApplicationDto, authorizedUser: LoggedInUser): Promise<Application> {
     try {
@@ -33,9 +43,15 @@ export class ApplicationService {
     }
   }
 
-  async delete(id: String) {
+  async delete(id: string) {
     try {
-      const deleteApp = await this.applicationModel.findByIdAndDelete({ _id: id });
+      const AppUser = await this.applicationModel.findOne({ _id: id }).populate('participants', '_id');
+      AppUser.participants.forEach(async (user) => {
+        const User = await this.userModel.findById(user);
+        User.authorizedApplications = User.authorizedApplications.filter((_id) => _id.toString() !== id);
+        await User.save();
+      });
+      await this.applicationModel.findByIdAndDelete({ _id: id });
     } catch (e) {
       this.logger.error(e);
       throw new ConflictException(e.message);
@@ -44,6 +60,11 @@ export class ApplicationService {
 
   findAll() {
     return this.applicationModel.find();
+  }
+
+  async findUsersGrantedAccess(id: string) {
+    const data = await this.applicationModel.findOne({ _id: id }).populate('participants', 'name collegeEmail');
+    return data;
   }
 
   async findOneById(id: string) {
@@ -62,13 +83,15 @@ export class ApplicationService {
   }
 
   async findAllByParticipant(user: User): Promise<Array<Application>> {
-    const item = await this.applicationModel.find({ participants: user });
+    const item = await this.applicationModel.find({
+      participants: { $in: [user] },
+    });
     return item;
   }
 
   async pushUserIntoApplicationParticipantList(application: Application, user: User) {
     try {
-      const result = await this.applicationModel.findOneAndUpdate(
+      await this.applicationModel.findOneAndUpdate(
         { name: application.name },
         {
           $addToSet: { participants: user },

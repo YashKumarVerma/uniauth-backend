@@ -1,4 +1,4 @@
-import { IsArray, IsEmail, IsNotEmpty, MaxLength, MinLength, Validate } from 'class-validator';
+import { IsArray, IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -19,7 +19,6 @@ export class CreateApplicationDto {
   name: string;
 
   @IsNotEmpty()
-  @MinLength(15)
   @MaxLength(100)
   description: string;
 

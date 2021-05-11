@@ -1,32 +1,20 @@
-import * as mongooseUniquevalidator from 'mongoose-unique-validator';
-
-import { MongooseModule, getModelToken } from '@nestjs/mongoose';
-import { User, UserDocument, UserSchema } from '../user/user.schema';
-
-import { Model } from 'mongoose';
-import { Test } from '@nestjs/testing';
-import { TestingModule } from '@nestjs/testing/testing-module';
 import { AuthService } from './auth.service';
-import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
-import { UserService } from '../user/user.service';
-import { UserModule } from '../user/user.module';
-import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { Test } from '@nestjs/testing';
+import { WinstonModule } from 'nest-winston';
+import { TestingModule } from '@nestjs/testing/testing-module';
+import { UserModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
 import { newJWTConstants } from './constants/auth.constants';
+import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
+import { LoggerConfig } from '../logger/LoggerConfig';
 
-const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
-  name: 'some user',
-  batch: '19',
-  branch: 'BCE',
-  personalEmail: 'someone@example.com',
-  collegeEmail: 'someoe@edu.in',
-});
+const logger: LoggerConfig = new LoggerConfig();
 
 /** mocking definitions */
 describe('Auth Service', () => {
   let testingModule: TestingModule;
   let service: AuthService;
-  let model: Model<UserDocument>;
 
   beforeEach(async () => {
     testingModule = await Test.createTestingModule({
@@ -37,6 +25,7 @@ describe('Auth Service', () => {
           secret: newJWTConstants.secret,
           signOptions: { expiresIn: newJWTConstants.expiresIn },
         }),
+        WinstonModule.forRoot(logger.console()),
       ],
       providers: [
         AuthService,
@@ -50,7 +39,7 @@ describe('Auth Service', () => {
     }).compile();
 
     service = testingModule.get<AuthService>(AuthService);
-    model = testingModule.get<Model<UserDocument>>(getModelToken(User.name));
+    // model = testingModule.get<Model<UserDocument>>(getModelToken(User.name));
   });
 
   afterEach(() => {

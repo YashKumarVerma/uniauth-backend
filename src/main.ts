@@ -1,14 +1,17 @@
 import * as config from 'config';
 import * as cookieParser from 'cookie-parser';
-import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
-
+import * as hbs from 'hbs';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { NestFactory } from '@nestjs/core';
 import { join } from 'path';
+import { WinstonModule } from 'nest-winston';
+import { LoggerConfig } from './logger/LoggerConfig';
+
+const logger: LoggerConfig = new LoggerConfig();
 
 /**
  * Bootstrap application by attaching middleware and initializing auxillary services
@@ -17,13 +20,16 @@ import { join } from 'path';
 async function bootstrap() {
   /** set the logging levels */
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    logger: ['log', 'error', 'warn', 'verbose'],
+    logger: WinstonModule.createLogger(logger.console()),
   });
 
   /** configuring public and views directory */
   app.useStaticAssets(join(__dirname, '../..', 'public'));
   app.setBaseViewsDir(join(__dirname, '../..', 'views'));
+  hbs.registerPartials(join(__dirname, '../../views', 'partials'));
+
   app.setViewEngine('hbs');
+  console.log(__dirname);
 
   /** configuring swaggerUI */
   const options = new DocumentBuilder()

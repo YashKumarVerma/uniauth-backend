@@ -1,16 +1,19 @@
 import * as mongooseUniquevalidator from 'mongoose-unique-validator';
-
+import { WinstonModule } from 'nest-winston';
 import { MongooseModule, getModelToken } from '@nestjs/mongoose';
-import { User, UserDocument, UserSchema } from './user.schema';
-
 import { Model } from 'mongoose';
 import { Test } from '@nestjs/testing';
 import { TestingModule } from '@nestjs/testing/testing-module';
+
+import { User, UserDocument, UserSchema } from './user.schema';
 import { UserService } from './user.service';
 import { rootMongooseTestModule } from '../../test-utils/MongooseTestModule';
+import { LoggerConfig } from '../logger/LoggerConfig';
 
-const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
-  name:'some user',
+const logger: LoggerConfig = new LoggerConfig();
+
+const mockUser = (): Partial<UserDocument> => ({
+  name: 'some user',
   batch: '19',
   branch: 'BCE',
   personalEmail: 'someone@example.com',
@@ -29,7 +32,7 @@ const mockUser = (mock?: Partial<User>): Partial<UserDocument> => ({
 describe('User Service', () => {
   let testingModule: TestingModule;
   let service: UserService;
-  let model: Model<UserDocument>;
+  //   let model: Model<UserDocument>;
 
   beforeEach(async () => {
     testingModule = await Test.createTestingModule({
@@ -45,6 +48,7 @@ describe('User Service', () => {
             },
           },
         ]),
+        WinstonModule.forRoot(logger.console()),
       ],
       providers: [
         UserService,
@@ -61,14 +65,14 @@ describe('User Service', () => {
     }).compile();
 
     service = testingModule.get<UserService>(UserService);
-    model = testingModule.get<Model<UserDocument>>(getModelToken(User.name));
+    testingModule.get<Model<UserDocument>>(getModelToken(User.name));
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', async() => {
+  it('should be defined', async () => {
     await expect(service).toBeDefined();
   });
 
