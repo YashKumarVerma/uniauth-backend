@@ -5,5 +5,5 @@ server:
   port: PORT
 
 database:
-  string: 'mongodb://127.0.0.1:27017/authentico'
+  string: 'mongodb://127.0.0.1:27017/uniauth-backend'
   type: 'mongodb'

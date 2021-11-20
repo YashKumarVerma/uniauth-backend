@@ -5,7 +5,7 @@ LABEL maintainer="Yash Kumar Verma yk.verma2000@gmail.com"
 
 # Document environment configurations
 ENV PORT=80
-ENV database ='mongodb://127.0.0.1:27017/authentico'
+ENV database ='mongodb://127.0.0.1:27017/uniauth-backend'
 
 # Create Directory for the Container
 WORKDIR /app
