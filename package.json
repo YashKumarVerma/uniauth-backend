@@ -1,7 +1,7 @@
 {
-  "name": "authentico-backend",
+  "name": "uniauth-backend",
   "version": "1.0.0",
-  "description": "Authentico is the core provider of auth services.",
+  "description": "uniauth-backend is the core provider of auth services.",
   "author": "Yash Kumar Verma <yk.verma2000@gmail.com>",
   "private": true,
   "license": "MIT",
@@ -27,7 +27,6 @@
   },
   "pre-commit": [
     "precommit-msg",
-    "test",
     "format",
     "lint"
   ],
